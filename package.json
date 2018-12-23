@@ -9,7 +9,7 @@
     "build": "next build ./src/client",
     "start": "next start -p 80 ./src/client",
     "server:dev": "nodemon src/server/index.js",
-    "server:start": "NODE_ENV=production node src/server/index.js"
+    "server:start": "set NODE_ENV=production && node src/server/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "express": "^4.16.4",
     "mongoose": "^5.4.0",
     "next": "^7.0.2",
+    "path": "^0.12.7",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-mqls": "^0.1.6",
@@ -47,6 +48,8 @@
     "eslint-loader": "^1.9.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "nodemon": "^1.18.9"
+    "next-offline": "^3.3.1",
+    "nodemon": "^1.18.9",
+    "workbox-webpack-plugin": "^3.6.3"
   }
 }

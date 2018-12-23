@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Layout, Menu, Icon } from 'antd';
-// import MediaQuery from 'react-mqls';
 
 const MediaQuery = dynamic(import('react-mqls'), {
     ssr: false,

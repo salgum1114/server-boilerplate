@@ -1,3 +1,14 @@
-import Home from '../components/Home';
+import React, { Component } from 'react';
 
-export default (props) => <Home {...props} />;
+import Home from '../components/Home';
+import registerServiceWorker from '../registerServiceWorker';
+
+export default class extends Component {
+    componentDidMount() {
+        registerServiceWorker();
+    }
+
+    render() {
+        return <Home {...this.props} />;
+    }
+}
