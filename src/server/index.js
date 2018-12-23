@@ -3,19 +3,21 @@ const express = require('express');
 const next = require('next');
 const bodyParser = require('body-parser');
 const { parse } = require('url');
+const getRoutes = require('./routes');
+const database = require('./database/database');
 
 const port = parseInt(process.env.PORT, 10) || 80;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src/client', dev });
 
 const handle = app.getRequestHandler();
-const getRoutes = require('./routes');
-
 const routes = getRoutes();
 
 const apiPrefix = '/api';
 
 app.prepare().then(() => {
+    database.init();
+
     const server = express();
     const vapidKeys = webpush.generateVAPIDKeys();
  
@@ -59,7 +61,7 @@ app.prepare().then(() => {
         }, 1000);
     });
 
-    server.use(`${apiPrefix}/posts`, require('./controller/posts'));
+    server.use(`${apiPrefix}/posts`, require('./controllers/posts'));
 
     server.get('*', (req, res) => {
         const parsedUrl = parse(req.url, true);
