@@ -4,17 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next -p 8080 ./src/client",
+    "build": "next build ./src/client",
+    "start": "next start -p 80 ./src/client",
+    "server:dev": "nodemon src/server/index.js",
+    "server:start": "NODE_ENV=production node src/server/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "antd": "^3.11.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "next": "^7.0.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-mqls": "^0.1.6",
+    "url": "^0.11.0",
     "web-push": "^3.3.3"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9",
     "@babel/core": "^7.1.6",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.1.6",
@@ -23,6 +33,8 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-less": "^1.0.1",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-dynamic-import-webpack": "^1.0.2",
@@ -30,6 +42,9 @@
     "clean-webpack-plugin": "^0.1.19",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-loader": "^1.9.0"
+    "eslint-loader": "^1.9.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "nodemon": "^1.18.9"
   }
 }

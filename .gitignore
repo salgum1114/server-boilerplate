@@ -3,3 +3,4 @@ node_modules/
 public/js
 public/index.html
 public/fonts
+.next/
