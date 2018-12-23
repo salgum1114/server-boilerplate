@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
-import { Layout, Menu } from 'antd';
+import dynamic from 'next/dynamic';
+import { Layout, Menu, Icon } from 'antd';
+// import MediaQuery from 'react-mqls';
+
+const MediaQuery = dynamic(import('react-mqls'), {
+    ssr: false,
+});
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { collapse: false };
+    }
+
     render() {
         const { children } = this.props;
         return (
@@ -22,7 +33,18 @@ class App extends Component {
                 </Layout.Sider>
                 <Layout>
                     <Layout.Header style={{ background: '#fff', padding: 0 }}>
-
+                    <MediaQuery
+                        queries={[
+                            {
+                                query: '(min-width: 768px)',
+                                component: null,
+                            },
+                            {
+                                query: '(max-width: 767px)',
+                                component: <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />,
+                            },
+                        ]}
+                    />
                     </Layout.Header>
                     <Layout.Content>
                         {children}
