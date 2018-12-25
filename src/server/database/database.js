@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports = {
     init: () => {
-        // Node.js의 native Promise 사용
+        // use Node.js with native Promise
         mongoose.Promise = global.Promise;
     
         // CONNECT TO MONGODB SERVER

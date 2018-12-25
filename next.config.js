@@ -6,10 +6,9 @@ const { resolve } = require('path');
 const getRoutes = require('./src/server/routes');
 
 module.exports = withOffline({
-    exportPathMap: getRoutes,
     ...withLess(),
-    generateInDevMode: true,
-    // devSwSrc: './src/client/service-worker.js',
+    exportPathMap: getRoutes,
+    generateInDevMode: false,
     generateSw: false,
     workboxOpts: {
         swSrc: './src/client/service-worker.js',

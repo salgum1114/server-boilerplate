@@ -15,8 +15,6 @@ const app = next({ dir: './src/client', dev });
 const handle = app.getRequestHandler();
 const routes = getRoutes();
 
-const apiPrefix = '/api';
-
 app.prepare().then(() => {
     database.init();
 
@@ -30,9 +28,14 @@ app.prepare().then(() => {
         vapidKeys.privateKey,
     );
 
+    // Body parser use
     server.use(bodyParser.urlencoded({extended: true}));
     server.use(bodyParser.json());
 
+    // API contoller use
+    server.use(require('./controllers'));
+
+    // Service worker push message
     server.get('/vapidPublicKey', function(req, res) {
         res.send(vapidKeys.publicKey);
     });
@@ -63,8 +66,7 @@ app.prepare().then(() => {
         }, 1000);
     });
 
-    server.use(`${apiPrefix}/posts`, require('./controllers/posts'));
-
+    // Resources handler
     server.get('/manifest.json', (req, res) => {
         res.sendFile(resolve(`./static/manifest.json`));
     });
@@ -82,7 +84,7 @@ app.prepare().then(() => {
 
     server.get('*', (req, res) => {
         const parsedUrl = parse(req.url, true);
-        const { pathname, query = {} } = parsedUrl;
+        let { pathname, query = {} } = parsedUrl;
         const route = routes[pathname];
         if (route) {
             return app.render(req, res, route.page, query);
@@ -90,7 +92,7 @@ app.prepare().then(() => {
         return handle(req, res);
     });
     
-
+    // Listen server
     server.listen(port, function (err) {
         if (err) throw err;
         console.log(`App Listening on port ${port}`);

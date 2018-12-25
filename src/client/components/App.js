@@ -1,23 +1,31 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, BackTop } from 'antd';
+
+import '../styles/index.less';
 
 const MediaQuery = dynamic(import('react-mqls'), {
     ssr: false,
 });
 
+const styles = {
+    layout: { overflow: 'hidden' },
+    sider: { overflow: 'auto', background: '#fff', padding: 0 },
+    header: { background: '#fff', padding: 0 },
+    content: { height: 'calc(100% - 64px)', overflow: 'auto' },
+}
+
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { collapse: false };
+    state = {
+        collapse: false,
     }
 
     render() {
         const { children } = this.props;
         return (
-            <Layout>
-                <Layout.Sider style={{ overflow: 'auto', background: '#fff', padding: 0 }}>
+            <Layout style={styles.layout}>
+                <Layout.Sider style={styles.sider}>
                     <Menu theme="light" mode="inline">
                         <Menu.Item key="home">
                             <Link href="/"><a>홈</a></Link>
@@ -31,7 +39,7 @@ class App extends Component {
                     </Menu>
                 </Layout.Sider>
                 <Layout>
-                    <Layout.Header style={{ background: '#fff', padding: 0 }}>
+                    <Layout.Header style={styles.header}>
                     <MediaQuery
                         queries={[
                             {
@@ -45,7 +53,8 @@ class App extends Component {
                         ]}
                     />
                     </Layout.Header>
-                    <Layout.Content>
+                    <Layout.Content style={styles.content}>
+                        <BackTop>UP</BackTop>
                         {children}
                     </Layout.Content>
                 </Layout>
