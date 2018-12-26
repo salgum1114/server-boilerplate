@@ -22,6 +22,7 @@
     "mongoose": "^5.4.0",
     "mongoose-auto-increment": "^5.0.1",
     "next": "^7.0.2",
+    "next-routes": "^1.4.2",
     "path": "^0.12.7",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",

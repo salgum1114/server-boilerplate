@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Layout, Menu, Icon, BackTop } from 'antd';
 
+import { Link } from '../../routes';
 import '../styles/index.less';
 
 const MediaQuery = dynamic(import('react-mqls'), {
@@ -28,13 +28,13 @@ class App extends Component {
                 <Layout.Sider style={styles.sider}>
                     <Menu theme="light" mode="inline">
                         <Menu.Item key="home">
-                            <Link href="/"><a>홈</a></Link>
+                            <Link route="/"><a>홈</a></Link>
                         </Menu.Item>
                         <Menu.Item key="notices">
-                            <Link href="/notices"><a>공지 사항</a></Link>
+                            <Link route="/notices"><a>공지 사항</a></Link>
                         </Menu.Item>
                         <Menu.Item key="posts">
-                            <Link href="/posts"><a>포스트</a></Link>
+                            <Link route="/posts"><a>포스트</a></Link>
                         </Menu.Item>
                     </Menu>
                 </Layout.Sider>

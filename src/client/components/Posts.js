@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { List, Card, Button, Avatar } from 'antd';
 import axios from 'axios';
-import Router from 'next/router';
+
+import { Router } from '../../routes';
 
 import Tags from './common/Tags';
 
@@ -34,7 +35,7 @@ class Posts extends Component {
                     renderItem={(post) => {
                         return (
                             <List.Item
-                                onClick={() => { Router.push(`/posts/${post._id}`); }}
+                                onClick={() => { Router.pushRoute(`/posts/${post._id}`); }}
                                 key={post._id}
                                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
                                 actions={[<Tags tags={post.tags} />]}

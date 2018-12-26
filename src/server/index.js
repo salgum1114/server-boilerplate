@@ -5,15 +5,14 @@ const bodyParser = require('body-parser');
 const { parse } = require('url');
 const { resolve, join } = require('path');
 
-const getRoutes = require('./routes');
+const routes = require('../routes');
 const database = require('./database/database');
 
 const port = parseInt(process.env.PORT, 10) || 80;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src/client', dev });
 
-const handle = app.getRequestHandler();
-const routes = getRoutes();
+const handler = routes.getRequestHandler(app);
 
 app.prepare().then(() => {
     database.init();
@@ -82,18 +81,8 @@ app.prepare().then(() => {
         res.sendFile(filePath);
     });
 
-    server.get('*', (req, res) => {
-        const parsedUrl = parse(req.url, true);
-        let { pathname, query = {} } = parsedUrl;
-        const route = routes[pathname];
-        if (route) {
-            return app.render(req, res, route.page, query);
-        }
-        return handle(req, res);
-    });
-    
     // Listen server
-    server.listen(port, function (err) {
+    server.use(handler).listen(port, function (err) {
         if (err) throw err;
         console.log(`App Listening on port ${port}`);
     });
