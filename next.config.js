@@ -3,7 +3,7 @@ const withLess = require('@zeit/next-less');
 const withOffline = require('next-offline');
 const { resolve } = require('path');
 
-const getRoutes = require('./src/server/routes');
+const getRoutes = require('./src/routes');
 
 module.exports = withOffline({
     ...withLess(),

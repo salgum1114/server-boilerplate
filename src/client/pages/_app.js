@@ -16,12 +16,12 @@ export default class RootApp extends App {
     }
 
     render() {
-        const { Component, pageProps, statusCode } = this.props;
+        const { Component, ...other } = this.props;
         return (
             <Container>
                 <LocaleProvider locale={koKR}>
                     <Layout>
-                        <Component pageProps={pageProps} statusCode={statusCode} />
+                        <Component {...other} />
                     </Layout>
                 </LocaleProvider>
             </Container>

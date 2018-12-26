@@ -12,8 +12,10 @@ router.get('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
     Post.findOneById(req.params.id)
         .then((post) => {
-            if (!post) return res.status(404).send({ message: 'Post not found' });
-            res.send(`findOne successfully: ${post}`);
+            if (!post) {
+               return res.json({ statusCode: 404, message: 'Post not found' });
+            }
+            res.send(post);
         })
         .catch(err => res.status(500).send(err));
 });
