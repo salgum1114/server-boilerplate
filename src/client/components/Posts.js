@@ -11,10 +11,6 @@ const PostEditor = dynamic(import('./posts/PostEditor'), {
     ssr: false,
 });
 
-const MediaQuery = dynamic(import('react-mqls'), {
-    ssr: false,
-});
-
 const styles = {
     container: { margin: '24px 48px' },
     writeButton: { position: 'absolute', bottom: '24px', right: '24px' },
