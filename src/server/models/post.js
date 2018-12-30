@@ -23,9 +23,14 @@ const PostSchema = new Schema({
     category: {
         type: String,
         required: true,
+        default: 'etc',
     },
     tags: {
         type: [String],
+    },
+    thumbnail: {
+        type: String,
+        default: '',
     },
     like: {
         type: Number,
@@ -37,12 +42,13 @@ const PostSchema = new Schema({
 
 // Create new todo document
 PostSchema.statics.create = function (payload) {
-    const preview = htmlToText.fromString(payload.content, {
+    const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
+    const preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,
-    }).substr(0, 120) + '...';
+    }).substr(0, 200) + '...';
     // this === Model
-    const post = new this({ ...payload, preview });
+    const post = new this({ ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' });
     // return Promise
     return post.save();
 };
@@ -61,12 +67,13 @@ PostSchema.statics.findOneById = function (id) {
   
 // Update by todoid
 PostSchema.statics.updateById = function (id, payload) {
-    const preview = htmlToText.fromString(payload.content, {
+    const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
+    const preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,
-    }).substr(0, 120) + '...';
+    }).substr(0, 200) + '...';
     // { new: true }: return the modified document rather than the original. defaults to false
-    return this.findOneAndUpdate({ _id: id }, { ...payload, preview }, { new: true });
+    return this.findOneAndUpdate({ _id: id }, { ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' }, { new: true });
 };
   
 // Delete by todoid

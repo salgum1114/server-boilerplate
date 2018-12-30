@@ -3,7 +3,7 @@ const express = require('express');
 const next = require('next');
 const bodyParser = require('body-parser');
 const { parse } = require('url');
-const { resolve, join } = require('path');
+const { resolve } = require('path');
 
 const routes = require('../routes');
 const database = require('./database/database');

@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
 import { List, Card, Button, Avatar } from 'antd';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 
-import { Router, Link } from '../../routes';
+import { Link } from '../../routes';
 
 import Tags from './common/Tags';
-import PostEditor from './posts/PostEditor';
+
+const PostEditor = dynamic(import('./posts/PostEditor'), {
+    ssr: false,
+});
+
+const MediaQuery = dynamic(import('react-mqls'), {
+    ssr: false,
+});
 
 const styles = {
     container: { margin: '24px 48px' },
     writeButton: { position: 'absolute', bottom: '24px', right: '24px' },
-    postSummary: { cursor: 'pointer' },
+    thumbnailContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 300,
+        height: 160,
+        overflow: 'hidden',
+    },
 };
 
 class Posts extends Component {
@@ -20,16 +35,32 @@ class Posts extends Component {
     }
 
     componentDidMount() {
+        console.log('componentDidMount', this.props);
+        this.getPosts();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log('componentWillReceiveProps', nextProps);
+        this.getPosts();
+    }
+
+    getPosts = () => {
         axios.get('/api/posts').then((response) => {
             this.setState({
                 posts: response.data,
             });
-        })
+        });
+    }
+
+    changeMode = () => {
+        this.setState({
+            writeMode: !this.state.writeMode,
+        });
     }
 
     render() {
         const { posts, writeMode } = this.state;
-        return writeMode ? <PostEditor /> : (
+        return writeMode ? <PostEditor changeMode={this.changeMode} /> : (
             <div style={styles.container}>
                 <List
                     itemLayout="vertical"
@@ -38,10 +69,19 @@ class Posts extends Component {
                     renderItem={(post) => {
                         return (
                             <List.Item
-                                onClick={() => { Router.pushRoute(`/posts/${post._id}`); }}
                                 style={styles.postSummary}
                                 key={post._id}
-                                extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                                extra={
+                                    <Link route={`/posts/${post._id}`}>
+                                        <a style={styles.thumbnailContainer}>
+                                            <img
+                                                width="100%"
+                                                alt="logo"
+                                                src={post.thumbnail && post.thumbnail.length ? post.thumbnail : 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png'}
+                                            />
+                                        </a>
+                                    </Link>
+                                }
                                 actions={[<Tags tags={post.tags} />]}
                             >
                                 <List.Item.Meta
@@ -49,7 +89,7 @@ class Posts extends Component {
                                     title={<Link route={`/posts/${post._id}`}><a>{post.title}</a></Link>}
                                     description={post.updatedAt}
                                 />
-                                {post.content}
+                                {post.preview}
                             </List.Item>
                         );
                     }}
