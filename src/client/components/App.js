@@ -18,9 +18,10 @@ const styles = {
     sider: { overflow: 'auto', background: '#fff', padding: 0 },
     title: { padding: '20px 24px', borderRadius: '4px 4px 0 0', background: '#fff', color: 'rgba(0, 0, 0, 0.65)', border: '1px solid #e8e8e8' },
     titleText: { margin: 0, lineHeight: '22px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.85)' },
+    menu: { height: 'calc(100% - 64px)'},
     drawer: { padding: 24, background: 'green' },
     header: { background: '#fff', padding: 0, display: 'flex', alignItems: 'center' },
-    content: { height: 'calc(100% - 64px)', overflow: 'auto' },
+    content: { height: 'calc(100% - 64px)', overflow: 'auto', background: '#fff' },
     menuIcon: { margin: '0 24px', cursor: 'pointer' },
     account: { display: 'flex', justifyContent: 'flex-end', flex: 1 },
     avatar: { margin: '0 24px' },
@@ -49,7 +50,7 @@ class App extends Component {
                                             {"Totalog"}
                                         </div>
                                     </div>
-                                    <Menu theme="light" mode="inline">
+                                    <Menu theme="light" mode="inline" style={styles.menu}>
                                         <Menu.Item key="home">
                                             <Link prefetch route="/"><a>홈</a></Link>
                                         </Menu.Item>

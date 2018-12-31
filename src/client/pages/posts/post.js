@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import ErrorPage from '../../components/ErrorPage';
-import Post from '../../components/posts/Post';
+import Post from '../../components/post/Post';
 
 const post = (props) => {
     if(props.pageProps.statusCode) {

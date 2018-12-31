@@ -7,7 +7,7 @@ import { Link } from '../../routes';
 
 import Tags from './common/Tags';
 
-const PostEditor = dynamic(import('./posts/PostEditor'), {
+const PostEditor = dynamic(import('./post/PostEditor'), {
     ssr: false,
 });
 
@@ -61,6 +61,7 @@ class Posts extends Component {
                 <List
                     itemLayout="vertical"
                     size="large"
+                    locale={{ emptyText: '첫 게시글을 작성해주세요.' }}
                     dataSource={posts}
                     renderItem={(post) => {
                         return (
