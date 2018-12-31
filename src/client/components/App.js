@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import dynamic from 'next/dynamic';
-import { Layout, Menu, Icon, Drawer, Avatar } from 'antd';
+import { Layout, Menu, Icon, Drawer, Avatar, Input } from 'antd';
 
 import { Link } from '../../routes';
 import '../styles/index.less';
 
-const BackTop = dynamic(import('antd/es/back-top'), {
-    ssr: false,
-});
-
 const MediaQuery = dynamic(import('react-mqls'), {
     ssr: false,
+    loading: () => '',
 });
 
 const styles = {
@@ -21,22 +18,26 @@ const styles = {
     menu: { height: 'calc(100% - 64px)'},
     drawer: { padding: 24, background: 'green' },
     header: { background: '#fff', padding: 0, display: 'flex', alignItems: 'center' },
-    content: { height: 'calc(100% - 64px)', overflow: 'auto', background: '#fff' },
-    menuIcon: { margin: '0 24px', cursor: 'pointer' },
-    account: { display: 'flex', justifyContent: 'flex-end', flex: 1 },
+    content: { height: 'calc(100% - 64px)', overflowY: 'auto', overflowX: 'hidden', background: '#fff' },
+    menuIcon: { margin: '0 24px', cursor: 'pointer', fontSize: '1.25em' },
+    search: { display: 'flex', flex: 1, margin: '0 24px', alignItems: 'center' },
+    searchInput: { marginLeft: 16, width: 0, transition: 'width 1.2s' },
+    searchIcon: { fontSize: '1.25em', cursor: 'pointer' },
+    account: { display: 'flex', justifyContent: 'flex-end' },
     avatar: { margin: '0 24px' },
 }
 
 class App extends Component {
     state = {
         collapsed: false,
+        searchMode: false,
     }
 
     onClose = () => this.setState({ collapsed: false });
 
     render() {
         const { children } = this.props;
-        const { collapsed } = this.state;
+        const { collapsed, searchMode } = this.state;
         return (
             <Layout style={styles.layout}>
                 <MediaQuery
@@ -111,12 +112,21 @@ class App extends Component {
                                 },
                             ]}
                         />
+                        <div style={styles.search}>
+                            {
+                                searchMode ? (
+                                    <>
+                                        <Icon style={styles.searchIcon} type="close" onClick={() => { this.setState({ searchMode: false }); }} />
+                                        <Input ref={(c) => { this.searchRef = c; }} style={styles.searchInput} />
+                                    </>
+                                ) : <Icon style={styles.searchIcon} type="search" onClick={() => { this.setState({ searchMode: true }, () => { this.searchRef.input.style.width = '100%'; }); }} />
+                            }
+                        </div>
                         <div style={styles.account}>
                             <Avatar style={styles.avatar}>{'Admin'.charAt(0).toUpperCase()}</Avatar>
                         </div>
                     </Layout.Header>
                     <Layout.Content style={styles.content}>
-                        <BackTop>UP</BackTop>
                         {children}
                     </Layout.Content>
                 </Layout>

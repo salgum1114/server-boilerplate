@@ -13,7 +13,7 @@ message.config({
 })
 
 const styles = {
-    container: { margin: '24px 48px', height: 'calc(100% - 48px)' },
+    container: { height: 'calc(100% - 48px)' },
     title: { width: '100%' },
     tags: { width: '100%' },
     category: { width: '100%' },
@@ -46,11 +46,11 @@ class PostEditor extends Component {
         const { post, changeMode } = this.props;
         if (!isEmpty(post)) {
             Router.pushRoute(`/posts/${post._id}`).then(() => {
-                changeMode();
+                changeMode(false);
             });
         } else {
             Router.pushRoute('/posts').then(() => {
-                changeMode();
+                changeMode(false);
             });
         }
     }
@@ -73,7 +73,7 @@ class PostEditor extends Component {
                 tags,
                 category,
                 content: content.concat('\n'),
-                preview: this.editor.getHtml().concat('\n'),
+                preview: this.editor.getHtml(),
             };
             if (isEmpty(post)) {
                 axios.post('/api/posts', newPost).then((response) => {
@@ -89,7 +89,7 @@ class PostEditor extends Component {
                     message.success('글쓰기 성공.')
                     Router.pushRoute(`/posts/${_id}`).then(() => {
                         console.log('asdfnajdfknasjfknajkfa');
-                        changeMode();
+                        changeMode(false);
                     });
                 }).catch((error) => {
                     console.error(`[ERROR] ${this.constructor.name} savePost()`, error);
@@ -101,16 +101,17 @@ class PostEditor extends Component {
     render() {
         const { form, post } = this.props;
         return (
-            <div style={styles.container}>
+            <div className="container" style={styles.container}>
                 <Form>
                     <Form.Item>
                         {
                             form.getFieldDecorator('title', {
                                 initialValue: post.title,
                                 rules: [
-                                    { required: true, min:0, message: '제목을 입력하세요.' },
+                                    { required: true, min: 0, message: '제목을 입력하세요.' },
+                                    { required: true, max: 100, message: '100 글자 이상 입력할 수 없습니다.' },
                                 ]
-                            })(<Input style={styles.title} min={0} minLength={0} placeholder="제목" />)
+                            })(<Input style={styles.title} min={0} minLength={0} max={100} maxLength={100} placeholder="제목" />)
                         }
                     </Form.Item>
                     <Form.Item>

@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, message, Modal } from 'antd';
 import dynamic from 'next/dynamic';
+import axios from 'axios';
 
 import { Router } from '../../../routes';
 
+message.config({
+    top: 60,
+    duration: 1,
+})
+
 const PostEditor = dynamic(import('./PostEditor'), {
     ssr: false,
+    loading: () => '',
 });
 
 const PostViewer = dynamic(import('./PostViewer'), {
     ssr: false,
+    loading: () => '',
 });
 
 const styles = {
-    container: { margin: '24px 48px' },
+    container: { display: 'flex', justifyContent: 'center' },
     noticeSummary: { cursor: 'pointer' },
     deleteButton: { position: 'absolute', bottom: '24px', right: '120px' },
     listButton: { position: 'absolute', bottom: '24px', right: '72px' },
@@ -39,11 +47,20 @@ class Post extends Component {
         });
     }
 
+    deletePost = (id) => {
+        axios.delete(`/api/posts/${id}`).then(() => {
+            message.success('글 삭제 성공');
+            Router.pushRoute('/posts');
+        }).catch((error) => {
+            console.error(`[ERROR] ${this.constructor.name} deletePost()`, error);
+        });
+    }
+
     render() {
         const { pageProps } = this.props;
         const { editMode } = this.state;
         return editMode ? <PostEditor post={pageProps.post} changeMode={this.changeMode} /> : (
-            <div style={styles.container}>
+            <div className="container" style={styles.container}>
                 <PostViewer post={pageProps.post} />
                 <Button
                     style={styles.deleteButton}
@@ -51,7 +68,15 @@ class Post extends Component {
                     icon="delete"
                     type="danger"
                     shape="circle-outline"
-                    onClick={() => { }}
+                    onClick={() => {
+                        Modal.confirm({
+                            title: '글 삭제',
+                            content: '글을 정말 삭제하시겠습니까?',
+                            okText: '확인',
+                            cancelText: '취소',
+                            onOk: () => this.deletePost(pageProps.post._id),
+                        });
+                    }}
                 />
                 <Button
                     style={styles.listButton}

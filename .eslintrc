@@ -12,7 +12,6 @@
         "react/jsx-indent-props": [2, 4],
         "react/forbid-prop-types": 0,
         "react/require-default-props": [0, { "forbidDefaultForRequired": false }],
-        "jsx-a11y/href-no-hash": 0,
         "no-mixed-operators": [
             "error",
             {
@@ -26,7 +25,6 @@
                 "allowSamePrecedence": false
             }
         ],
-        "jsx-a11y/anchor-is-valid": 0,
         "object-curly-newline": 0
     },
     "env": {

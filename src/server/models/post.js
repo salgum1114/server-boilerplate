@@ -43,10 +43,13 @@ const PostSchema = new Schema({
 // Create new todo document
 PostSchema.statics.create = function (payload) {
     const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
-    const preview = htmlToText.fromString(payload.preview, {
+    let preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,
-    }).substr(0, 200) + '...';
+    });
+    if (preview && preview.length > 200) {
+        preview = preview.substr(0, 200) + '...';
+    }
     // this === Model
     const post = new this({ ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' });
     // return Promise
@@ -68,10 +71,13 @@ PostSchema.statics.findOneById = function (id) {
 // Update by todoid
 PostSchema.statics.updateById = function (id, payload) {
     const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
-    const preview = htmlToText.fromString(payload.preview, {
+    let preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,
-    }).substr(0, 200) + '...';
+    });
+    if (preview && preview.length > 200) {
+        preview = preview.substr(0, 200) + '...';
+    }
     // { new: true }: return the modified document rather than the original. defaults to false
     return this.findOneAndUpdate({ _id: id }, { ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' }, { new: true });
 };

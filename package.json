@@ -9,7 +9,7 @@
     "build": "next build ./src/client",
     "start": "next start -p 80 ./src/client",
     "server:dev": "nodemon src/server/index.js",
-    "server:start": "set NODE_ENV=production && node src/server/index.js"
+    "server:start": "set NODE_ENV=production&&node src/server/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "next": "^7.0.2",
     "next-images": "^1.0.4",
     "next-routes": "^1.4.2",
+    "nprogress": "^0.2.0",
     "path": "^0.12.7",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",

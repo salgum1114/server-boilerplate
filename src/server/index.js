@@ -74,6 +74,10 @@ app.prepare().then(() => {
         res.sendFile(resolve(`./static/favicon.ico`));
     });
 
+    server.get('/loader.css', (req, res) => {
+        res.sendFile(resolve(`./static/loader.css`));
+    });
+
     server.get('/service-worker.js', (req, res) => {
         const parsedUrl = parse(req.url, true);
         const { pathname, query = {} } = parsedUrl;
