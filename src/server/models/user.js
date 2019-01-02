@@ -108,6 +108,25 @@ UserSchema.statics.deleteById = function (userId) {
     return this.remove({ userId });
 };
 
+UserSchema.statics.getAuthenticated = function (userId, password, cb) {
+    this.findOne({ userId }, function (err, user) {
+        if (err) {
+            return cb(err);
+        }
+        if (!user) {
+            return cb(null, null, 0);
+        }
+        user.comparePassword(password, function (err, isMatch) {
+            if (err) {
+                return cb(err);
+            }
+            if (isMatch) {
+                return cb(null, user);
+            }
+        });
+    });
+};
+
 UserSchema.plugin(autoIncrement.plugin, 'User');
 UserSchema.plugin(uniqueValidator);
 const Model = mongoose.model('User', UserSchema);

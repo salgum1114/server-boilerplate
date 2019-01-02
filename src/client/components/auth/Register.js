@@ -75,7 +75,16 @@ class Login extends Component {
                                 rules: [
                                     { required: true, message: '비밀번호를 입력하세요.' },
                                 ],
-                            })(<Input placeholder="비밀번호를 입력하세요" />)
+                            })(<Input placeholder="비밀번호를 입력하세요" type="password" />)
+                        }
+                    </Form.Item>
+                    <Form.Item>
+                        {
+                            form.getFieldDecorator('password-checked', {
+                                rules: [
+                                    { required: true, message: '비밀번호를 입력하세요.' },
+                                ],
+                            })(<Input placeholder="비밀번호를 한번 더 입력하세요." type="password" />)
                         }
                     </Form.Item>
                     <Button type="primary" onClick={() => {}}>{'회원 가입'}</Button>

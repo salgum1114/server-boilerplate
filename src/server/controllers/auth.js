@@ -1,9 +1,12 @@
 const express = require('express');
-const Post = require('../models/post');
+const User = require('../models/user');
 
 const router = express.Router();
 
 router.post('/login', function (req, res, next) {
+    // User.getAuthenticated(req.body.userId, req.body.password, function (err, user, reason) {
+        
+    // });
     Post.findAll()
         .then(posts => res.send(posts))
         .catch(err => res.status(500).send(err));
