@@ -13,7 +13,7 @@ message.config({
 })
 
 const styles = {
-    container: { height: 'calc(100% - 48px)' },
+    container: {},
     title: { width: '100%' },
     tags: { width: '100%' },
     category: { width: '100%' },

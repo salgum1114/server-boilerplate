@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const htmlToText = require('html-to-text');
+const utils = require('../../utils');
 
 const Schema = mongoose.Schema;
 
@@ -8,6 +9,11 @@ autoIncrement.initialize(mongoose.connection);
 mongoose.set('useCreateIndex', true);
 
 const PostSchema = new Schema({
+    user: {
+        type: String,
+        ref: 'User',
+        required: true,
+    },
     title: {
         type: String,
         default: '(제목없음)',
@@ -25,24 +31,26 @@ const PostSchema = new Schema({
         required: true,
         default: 'etc',
     },
-    tags: {
-        type: [String],
-    },
+    tags: [String],
     thumbnail: {
         type: String,
         default: '',
     },
-    like: {
+    views: {
         type: Number,
         default: 0,
     },
+    created: {
+        type: Date,
+        default: Date.now(),
+    }
 }, {
     timestamps: true,
 });
 
 // Create new todo document
 PostSchema.statics.create = function (payload) {
-    const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
+    const thumbnail_matches = utils.matchesImage(payload.preview);
     let preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,
@@ -70,7 +78,7 @@ PostSchema.statics.findOneById = function (id) {
   
 // Update by todoid
 PostSchema.statics.updateById = function (id, payload) {
-    const thumbnail_matches = payload.preview.match(`<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>`);
+    const thumbnail_matches = utils.matchesImage(payload.preview);
     let preview = htmlToText.fromString(payload.preview, {
         ignoreHref: true,
         ignoreImage: true,

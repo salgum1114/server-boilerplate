@@ -13,7 +13,7 @@ const PostEditor = dynamic(import('./post/PostEditor'), {
 });
 
 const styles = {
-    container: { height: '100%' },
+    container: {},
     writeButton: { position: 'absolute', bottom: '24px', right: '24px' },
     thumbnail: {
         display: 'flex',
@@ -177,6 +177,7 @@ class Posts extends Component {
             <>
                 <div className="container" style={styles.container}>
                     {this.renderCard()}
+                    {/* {this.renderList()} */}
                 </div>
                 <Button
                     style={styles.writeButton}

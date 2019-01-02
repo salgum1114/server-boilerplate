@@ -11,8 +11,9 @@ router.get(API_PREFIX, (req, res) => {
         message: 'This API server',
     });
 });
-// router.use(`${API_PREFIX}/home`, require('./home'))
 // router.use(`${API_PREFIX}/notices`, require('./notices'))
+router.use(`${API_PREFIX}`, require('./auth'));
 router.use(`${API_PREFIX}/posts`, require('./posts'));
+router.use(`${API_PREFIX}/users`, require('./users'));
 
 module.exports = router;

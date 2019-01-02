@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import dynamic from 'next/dynamic';
-import { Layout, Menu, Icon, Drawer, Avatar, Input } from 'antd';
+import { Layout, Menu, Icon, Drawer, Avatar, Input, Dropdown } from 'antd';
 
 import { Link } from '../../routes';
 import '../styles/index.less';
+import UserAvatar from './user/UserAvatar';
 
 const MediaQuery = dynamic(import('react-mqls'), {
     ssr: false,
@@ -24,7 +25,6 @@ const styles = {
     searchInput: { marginLeft: 16, width: 0, transition: 'width 1.2s' },
     searchIcon: { fontSize: '1.25em', cursor: 'pointer' },
     account: { display: 'flex', justifyContent: 'flex-end' },
-    avatar: { margin: '0 24px' },
 }
 
 class App extends Component {
@@ -55,9 +55,9 @@ class App extends Component {
                                         <Menu.Item key="home">
                                             <Link prefetch route="/"><a>홈</a></Link>
                                         </Menu.Item>
-                                        <Menu.Item key="notices">
+                                        {/* <Menu.Item key="notices">
                                             <Link prefetch route="/notices"><a>공지 사항</a></Link>
-                                        </Menu.Item>
+                                        </Menu.Item> */}
                                         <Menu.Item key="posts">
                                             <Link prefetch route="/posts"><a>포스트</a></Link>
                                         </Menu.Item>
@@ -123,7 +123,7 @@ class App extends Component {
                             }
                         </div>
                         <div style={styles.account}>
-                            <Avatar style={styles.avatar}>{'Admin'.charAt(0).toUpperCase()}</Avatar>
+                            <UserAvatar />
                         </div>
                     </Layout.Header>
                     <Layout.Content style={styles.content}>

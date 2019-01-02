@@ -12,25 +12,25 @@ const styles = {
     description: { wordBreak: 'break-word', color: '#868e96' },
 }
 
-class AuthorInfo extends Component {
+class UserInfo extends Component {
     static propTypes = {
-        author: PropTypes.object,
+        user: PropTypes.object,
     }
 
     render() {
-        const { author } = this.props;
+        const { user } = this.props;
         return (
             <div style={styles.container}>
                 <div style={styles.avatarContainer}>
-                    <Avatar style={styles.avatar} src={author.avatar} alt={author.name} size="large">{author.name.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar style={styles.avatar} src={user.avatar} alt={user.username} size="large">{user.username.charAt(0).toUpperCase()}</Avatar>
                 </div>
                 <div>
-                    <Link route={`/account/${author.id}`}><a style={styles.id}>{author.id}</a></Link>
-                    <div style={styles.description}>{author.description}</div>
+                    <Link route={`/account/${user.userId}`}><a style={styles.id}>{user.userId}</a></Link>
+                    <div style={styles.description}>{user.bio}</div>
                 </div>
             </div>
         );
     }
 }
 
-export default AuthorInfo;
+export default UserInfo;
