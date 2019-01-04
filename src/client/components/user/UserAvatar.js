@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Avatar, Dropdown, Menu, Icon } from 'antd';
 import isEmpty from 'lodash/isEmpty';
+import firebase from 'firebase/app';
 
 import { Router, Link } from '../../../routes';
 
@@ -10,12 +10,32 @@ const styles = {
 };
 
 class UserAvatar extends Component {
-    static propTypes = {
-        user: PropTypes.object,
+    state = {
+        currentUser: null,
+    }
+
+    componentDidMount() {
+        if (firebase.apps.length) {
+            firebase.auth().onAuthStateChanged((currentUser) => {
+                if (currentUser) {
+                    this.setState({
+                        currentUser: currentUser.providerData[0],
+                    });
+                } else {
+                    this.setState({
+                        currentUser: null,
+                    });
+                }
+            });
+        }
+    }
+
+    onLogout = () => {
+        firebase.auth().signOut();
     }
 
     render() {
-        const { user } = this.props;
+        const { currentUser } = this.state;
         const menu = (
             <Menu>
                 <Menu.Item>
@@ -27,15 +47,15 @@ class UserAvatar extends Component {
                 </Menu.Item>
                 <Menu.Divider/>
                 <Menu.Item>
-                    <Link route="/posts"><a>{'로그 아웃'}</a></Link>
+                    <Link route="/posts"><a onClick={this.onLogout}>{'로그 아웃'}</a></Link>
                 </Menu.Item>
             </Menu>
         );
-        return isEmpty(user) ? (
+        return isEmpty(currentUser) ? (
             <Avatar style={styles.avatar} onClick={() => { Router.pushRoute('/login'); }}><Icon type="user" /></Avatar>
         ) : (
             <Dropdown overlay={menu} trigger={['click']}>
-                <Avatar style={styles.avatar}>{'Admin'.charAt(0).toUpperCase()}</Avatar>
+                <Avatar src={currentUser.photoUrl} style={styles.avatar}>{currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : ''}</Avatar>
             </Dropdown>
         );
     }

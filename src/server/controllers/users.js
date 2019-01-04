@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 });
   
 router.get('/:id', function (req, res, next) {
-    User.findOneById(req.params.id)
+    User.findOneByEmail(req.params.id)
         .then((user) => {
             if (!user) {
                return res.json({ statusCode: 404, message: 'User not found' });
@@ -27,13 +27,13 @@ router.post('/', function (req, res, next) {
 });
   
 router.put('/:id', function (req, res, next) {
-    User.updateById(req.params.id, req.body)
+    User.updateByEmail(req.params.id, req.body)
         .then(user => res.send(user))
         .catch(err => res.status(500).send(err));
 });
   
 router.delete('/:id', function (req, res, next) {
-    User.deleteById(req.params.id)
+    User.deleteByEmail(req.params.id)
         .then(() => res.sendStatus(200))
         .catch(err => res.status(500).send(err));
 });

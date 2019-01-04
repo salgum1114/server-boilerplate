@@ -4,6 +4,8 @@ import { LocaleProvider } from 'antd';
 import koKR from 'antd/lib/locale-provider/ko_KR';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import Layout from '../components/App';
 
@@ -21,6 +23,37 @@ export default class RootApp extends App {
         return { statusCode, pageProps };
     }
 
+    constructor(props) {
+        super(props);
+        const initializeFirebase = async () => {
+            const config = {
+            };
+            //initialize firebase
+            await firebase.initializeApp(config);
+        };
+        if (!firebase.apps.length) {
+            initializeFirebase();
+        }
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({
+                    initLoading: false,
+                    currentUser: user,
+                });
+            } else {
+                this.setState({
+                    initLoading: false,
+                    currentUser: null,
+                });
+            }
+        });
+    }
+
+    state = {
+        initLoading: true,
+        currentUser: null,
+    }
+
     componentDidMount() {
         const loadingEl = document.getElementById('loader');
         if (loadingEl) {
@@ -33,14 +66,23 @@ export default class RootApp extends App {
 
     render() {
         const { Component, ...other } = this.props;
-        return (
-            <Container>
-                <LocaleProvider locale={koKR}>
-                    <Layout>
-                        <Component {...other} />
-                    </Layout>
-                </LocaleProvider>
-            </Container>
-        );
+        const { currentUser, initLoading } = this.state;
+        if (!initLoading) {
+            const loadingEl = document.getElementById('loader');
+            if (loadingEl) {
+                loadingEl.style.opacity = 0;
+                loadingEl.remove ? loadingEl.remove() : loadingEl.removeNode(true);
+            }
+            return (
+                <Container>
+                    <LocaleProvider locale={koKR}>
+                        <Layout>
+                            <Component {...other} currentUser={currentUser} />
+                        </Layout>
+                    </LocaleProvider>
+                </Container>
+            );
+        }
+        return null;
     }
 }

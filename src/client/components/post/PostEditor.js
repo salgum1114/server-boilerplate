@@ -4,6 +4,7 @@ import TuiEditor from 'tui-editor';
 import { Button, Input, Select, Form, message } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import axios from 'axios';
+import firebase from 'firebase/app';
 
 import { Router } from '../../../routes';
 
@@ -67,6 +68,10 @@ class PostEditor extends Component {
                 message.warn('내용을 입력하세요.');
                 return;
             }
+            if (!firebase.auth().currentUser) {
+                return;
+            }
+            const currentUser = firebase.auth().currentUser.providerData[0];
             const { title, tags, category } = values;
             const newPost = {
                 title,
@@ -74,6 +79,7 @@ class PostEditor extends Component {
                 category,
                 content: content.concat('\n'),
                 preview: this.editor.getHtml(),
+                user: currentUser,
             };
             if (isEmpty(post)) {
                 axios.post('/api/posts', newPost).then((response) => {

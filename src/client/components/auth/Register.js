@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Divider, Icon, Upload } from 'antd';
+import { Form, Input, Button } from 'antd';
+import axios from 'axios';
+import firebase from 'firebase/app';
 
-import { Link } from '../../../routes';
+import { Router } from '../../../routes';
 
 const styles = {
     container: { height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' },
@@ -10,50 +12,43 @@ const styles = {
 }
 
 class Login extends Component {
-    state = {
-        loading: false,
+    componentWillMount() {
+        if (this.props.currentUser) {
+            Router.pushRoute('/posts');
+        }
+    }
+
+    onRegister = () => {
+        const { form } = this.props;
+        form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            axios.post('/api/register', values)
+            .then((response) => {
+                firebase.auth().signInWithEmailAndPassword(values.email, values.password)
+                .then((response) => {
+                    Router.pushRoute('/posts');
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            })
+            .catch(error => console.error(error));
+        });
     }
 
     render() {
-        const { form } = this.props;
-        const { imageUrl, loading } = this.state;
-        // const uploadButton = (
-        //     <div>
-        //         <Icon type={loading ? 'loading' : 'plus'} />
-        //         <div>Upload</div>
-        //     </div>
-        // );
+        const { form, currentUser } = this.props;
+        if (currentUser) {
+            return null;
+        }
         return (
             <div className="container" style={styles.container}>
                 <Form style={styles.form}>
-                    {/* <Form.Item style={styles.upload}>
-                        {
-                            form.getFieldDecorator('avatar', {
-
-                            })(
-                                <Upload
-                                    name="avatar"
-                                    listType="picture-card"
-                                    className="avatar-uploader"
-                                    showUploadList={false}
-                                >
-                                    {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
-                                </Upload>
-                            )
-                        }
-                    </Form.Item> */}
-                    <Form.Item label={'아이디'} colon={false}>
-                        {
-                            form.getFieldDecorator('userId', {
-                                rules: [
-                                    { required: true, message: '아이디를 입력하세요.' },
-                                ],
-                            })(<Input placeholder="아이디를 입력하세요" />)
-                        }
-                    </Form.Item>
                     <Form.Item label={'이름'} colon={false}>
                         {
-                            form.getFieldDecorator('username', {
+                            form.getFieldDecorator('displayName', {
                                 rules: [
                                     { required: true, message: '이름을 입력하세요.' },
                                 ],
@@ -78,16 +73,7 @@ class Login extends Component {
                             })(<Input placeholder="비밀번호를 입력하세요" type="password" />)
                         }
                     </Form.Item>
-                    <Form.Item>
-                        {
-                            form.getFieldDecorator('password-checked', {
-                                rules: [
-                                    { required: true, message: '비밀번호를 입력하세요.' },
-                                ],
-                            })(<Input placeholder="비밀번호를 한번 더 입력하세요." type="password" />)
-                        }
-                    </Form.Item>
-                    <Button type="primary" onClick={() => {}}>{'회원 가입'}</Button>
+                    <Button type="primary" onClick={this.onRegister}>{'회원 가입'}</Button>
                 </Form>
             </div>
         );

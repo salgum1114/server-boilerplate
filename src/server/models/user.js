@@ -10,12 +10,6 @@ autoIncrement.initialize(mongoose.connection);
 mongoose.set('useCreateIndex', true);
 
 const UserSchema = new Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true,
-        index: true,
-    },
     password: {
         type: String,
         required: true,
@@ -27,12 +21,12 @@ const UserSchema = new Schema({
         unique: true,
         index: true,
     },
-    username: {
+    displayName: {
         type: String,
         required: true,
     },
     bio: String,
-    avatar: String,
+    photoUrl: String,
     role: {
         type: String,
         required: true,
@@ -93,23 +87,23 @@ UserSchema.statics.findAll = function () {
 };
   
 // Find One by todoid
-UserSchema.statics.findOneById = function (userId) {
-    return this.findOne({ userId });
+UserSchema.statics.findOneByEmail = function (email) {
+    return this.findOne({ email });
 };
   
 // Update by todoid
-UserSchema.statics.updateById = function (userId, payload) {
+UserSchema.statics.updateByEmail = function (email, payload) {
     // { new: true }: return the modified document rather than the original. defaults to false
-    return this.findOneAndUpdate({ userId }, payload, { new: true });
+    return this.findOneAndUpdate({ email }, payload, { new: true });
 };
   
 // Delete by todoid
-UserSchema.statics.deleteById = function (userId) {
-    return this.remove({ userId });
+UserSchema.statics.deleteByEmail = function (email) {
+    return this.remove({ email });
 };
 
-UserSchema.statics.getAuthenticated = function (userId, password, cb) {
-    this.findOne({ userId }, function (err, user) {
+UserSchema.statics.getAuthenticated = function (email, password, cb) {
+    this.findOne({ email }, function (err, user) {
         if (err) {
             return cb(err);
         }

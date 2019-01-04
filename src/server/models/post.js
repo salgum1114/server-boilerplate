@@ -8,10 +8,18 @@ const Schema = mongoose.Schema;
 autoIncrement.initialize(mongoose.connection);
 mongoose.set('useCreateIndex', true);
 
+const UserSchema = new Schema({
+    displayName: String,
+    email: String,
+    phoneNumber: String,
+    providerId: String,
+    photoUrl: String,
+    uid: String,
+});
+
 const PostSchema = new Schema({
     user: {
-        type: String,
-        ref: 'User',
+        type: UserSchema,
         required: true,
     },
     title: {
@@ -30,6 +38,7 @@ const PostSchema = new Schema({
         type: String,
         required: true,
         default: 'etc',
+        enum: ['notice', 'post', 'etc'],
     },
     tags: [String],
     thumbnail: {

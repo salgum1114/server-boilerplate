@@ -13,6 +13,7 @@ module.exports = {
                 User.findById('salgum1112@gmail.com').then((user) => {
                     if (!user) {
                         const Admin = {
+                            userId: 'admin',
                             email: 'salgum1112@gmail.com',
                             username: 'salgum1112',
                             password: 'admin',

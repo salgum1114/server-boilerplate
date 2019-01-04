@@ -22,10 +22,10 @@ class UserInfo extends Component {
         return (
             <div style={styles.container}>
                 <div style={styles.avatarContainer}>
-                    <Avatar style={styles.avatar} src={user.avatar} alt={user.username} size="large">{user.username.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar style={styles.avatar} src={user.photoUrl} alt={user.displayName} size="large">{user.displayName.charAt(0).toUpperCase()}</Avatar>
                 </div>
                 <div>
-                    <Link route={`/account/${user.userId}`}><a style={styles.id}>{user.userId}</a></Link>
+                    <Link route={`/account/${user.uid}`}><a style={styles.id}>{user.uid}</a></Link>
                     <div style={styles.description}>{user.bio}</div>
                 </div>
             </div>

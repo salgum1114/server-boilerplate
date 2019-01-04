@@ -19,6 +19,8 @@
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "firebase": "^5.7.2",
+    "firebase-admin": "^6.4.0",
     "html-to-text": "^4.0.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.0",

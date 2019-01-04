@@ -4,7 +4,6 @@ import axios from 'axios';
 import dynamic from 'next/dynamic';
 
 import { Router, Link } from '../../routes';
-
 import Tags from './common/Tags';
 
 const PostEditor = dynamic(import('./post/PostEditor'), {
@@ -69,7 +68,6 @@ class Posts extends Component {
     componentWillReceiveProps(nextProps) {
         console.log('componentWillReceiveProps', nextProps);
         this.changeMode(false);
-        // this.getPosts();
     }
 
     getPosts = (callback) => {
