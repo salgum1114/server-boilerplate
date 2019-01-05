@@ -19,9 +19,10 @@ router.get('/:id', function (req, res, next) {
         })
         .catch(err => res.status(500).send(err));
 });
-  
+
+router.use('/', require('../middlewares/firebaseMiddleware'));
 router.post('/', function (req, res, next) {
-    Post.create(req.body)
+    Post.create(req, res)
         .then(post => res.send(post))
         .catch(err => res.status(500).send(err));
 });

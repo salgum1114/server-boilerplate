@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 
 import { Link } from '../../../routes';
 
@@ -19,13 +20,18 @@ class UserInfo extends Component {
 
     render() {
         const { user } = this.props;
+        if (isEmpty(user) || typeof user === 'string') {
+            return null;
+        }
         return (
             <div style={styles.container}>
                 <div style={styles.avatarContainer}>
-                    <Avatar style={styles.avatar} src={user.photoUrl} alt={user.displayName} size="large">{user.displayName.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar style={styles.avatar} src={user.photoURL} alt={user.displayName} size="large">
+                        {user.displayName ? user.displayName.charAt(0).toUpperCase() : ''}
+                    </Avatar>
                 </div>
                 <div>
-                    <Link route={`/account/${user.uid}`}><a style={styles.id}>{user.uid}</a></Link>
+                    <Link route={`/account/${user.email}`}><a style={styles.id}>{user.displayName}</a></Link>
                     <div style={styles.description}>{user.bio}</div>
                 </div>
             </div>

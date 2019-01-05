@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import axios from 'axios';
 
 import { Router } from '../../../routes';
+import AuthButton from '../auth/AuthButton';
 
 message.config({
     top: 60,
@@ -23,9 +24,16 @@ const PostViewer = dynamic(import('./PostViewer'), {
 const styles = {
     container: { display: 'flex', justifyContent: 'center' },
     noticeSummary: { cursor: 'pointer' },
-    deleteButton: { position: 'absolute', bottom: '24px', right: '120px' },
-    listButton: { position: 'absolute', bottom: '24px', right: '72px' },
-    editButton: { position: 'absolute', bottom: '24px', right: '24px' },
+    buttonContainer: {
+        position: 'absolute',
+        bottom: 24,
+        right: 24,
+        display: 'flex',
+    },
+    button: {
+        margin: '0 4px',
+    },
+    editButton: { marginLeft: 4 },
 };
 
 class Post extends Component {
@@ -62,37 +70,41 @@ class Post extends Component {
         return editMode ? <PostEditor post={pageProps.post} changeMode={this.changeMode} /> : (
             <div className="container" style={styles.container}>
                 <PostViewer post={pageProps.post} />
-                <Button
-                    style={styles.deleteButton}
-                    size="large"
-                    icon="delete"
-                    type="danger"
-                    shape="circle-outline"
-                    onClick={() => {
-                        Modal.confirm({
-                            title: '글 삭제',
-                            content: '글을 정말 삭제하시겠습니까?',
-                            okText: '확인',
-                            cancelText: '취소',
-                            onOk: () => this.deletePost(pageProps.post._id),
-                        });
-                    }}
-                />
-                <Button
-                    style={styles.listButton}
-                    size="large"
-                    icon="bars"
-                    shape="circle-outline"
-                    onClick={() => { Router.pushRoute('/posts'); }}
-                />
-                <Button
-                    style={styles.editButton}
-                    size="large"
-                    icon="edit"
-                    type="primary"
-                    shape="circle-outline"
-                    onClick={() => { this.setState({ editMode: true }); }}
-                />
+                <div style={styles.buttonContainer}>
+                    <AuthButton
+                        style={styles.button}
+                        size="large"
+                        icon="delete"
+                        type="danger"
+                        shape="circle-outline"
+                        compareUid={pageProps.post.user.uid}
+                        onClick={() => {
+                            Modal.confirm({
+                                title: '글 삭제',
+                                content: '글을 정말 삭제하시겠습니까?',
+                                okText: '확인',
+                                cancelText: '취소',
+                                onOk: () => this.deletePost(pageProps.post._id),
+                            });
+                        }}
+                    />
+                    <Button
+                        style={styles.button}
+                        size="large"
+                        icon="bars"
+                        shape="circle-outline"
+                        onClick={() => { Router.pushRoute('/posts'); }}
+                    />
+                    <AuthButton
+                        style={styles.editButton}
+                        size="large"
+                        icon="edit"
+                        type="primary"
+                        shape="circle-outline"
+                        compareUid={pageProps.post.user.uid}
+                        onClick={() => { this.setState({ editMode: true }); }}
+                    />
+                </div>
             </div>
         );
     }

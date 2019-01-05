@@ -19,7 +19,8 @@ router.get('/:id', function (req, res, next) {
         })
         .catch(err => res.status(500).send(err));
 });
-  
+
+router.use('/', require('../middlewares/firebaseMiddleware'));
 router.post('/', function (req, res, next) {
     User.create(req.body)
         .then(user => res.send(user))

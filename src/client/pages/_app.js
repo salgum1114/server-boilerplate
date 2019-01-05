@@ -5,9 +5,10 @@ import koKR from 'antd/lib/locale-provider/ko_KR';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import firebase from 'firebase/app';
-import 'firebase/auth';
 
 import Layout from '../components/App';
+import { initializeFirebase } from '../firebase/firebase';
+import client from '../services/client';
 
 Router.events.on('routeChangeStart', (url) => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -25,21 +26,23 @@ export default class RootApp extends App {
 
     constructor(props) {
         super(props);
-        const initializeFirebase = async () => {
-            const config = {
-            };
-            //initialize firebase
-            await firebase.initializeApp(config);
-        };
-        if (!firebase.apps.length) {
-            initializeFirebase();
-        }
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
+        initializeFirebase();
+        firebase.auth().onAuthStateChanged((currentUser) => {
+            if (currentUser) {
+                // const user = {
+                //     uid: currentUser.uid,
+                //     displayName: currentUser.displayName,
+                //     photoURL: currentUser.photoURL,
+                //     phoneNumber: currentUser.phoneNumber,
+                //     email: currentUser.email,
+                //     providerId: currentUser.providerId,
+                // };
+                // client.put(`/api/users/${currentUser.email}`, user).then((response) => {
                 this.setState({
                     initLoading: false,
-                    currentUser: user,
+                    currentUser,
                 });
+                // });
             } else {
                 this.setState({
                     initLoading: false,
@@ -52,16 +55,6 @@ export default class RootApp extends App {
     state = {
         initLoading: true,
         currentUser: null,
-    }
-
-    componentDidMount() {
-        const loadingEl = document.getElementById('loader');
-        if (loadingEl) {
-            loadingEl.style.opacity = 0;
-            setTimeout(() => {
-                loadingEl.remove ? loadingEl.remove() : loadingEl.removeNode(true);
-            }, 1000);
-        }
     }
 
     render() {

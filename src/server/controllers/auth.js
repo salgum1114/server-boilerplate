@@ -14,13 +14,14 @@ router.post('/register', function (req, res, next) {
     })
     .then((user) => {
         User.create({
+            uid: user.uid,
             email: user.email,
-            password: req.body.password,
             displayName: user.displayName,
             photoUrl: user.photoURL,
             phoneNumber: user.phoneNumber,
             providerId: user.providerId,
             bio: req.body.bio,
+            role: 'user',
         }).then(createdUser => res.send(createdUser));
         // admin.app().database().ref('users').child(user.uid).set({
         //     email: user.email,
@@ -33,7 +34,33 @@ router.post('/register', function (req, res, next) {
         //     res.send(user);
         // });
     })
-    .catch(err => res.status(500).send(err));
+    .catch((err) => {
+        if (err.code === 'auth/email-already-exists') {
+            admin.auth().getUserByEmail(req.body.email).then((user) => {
+                User.findOneByEmail(req.body.email).then((findUser) => {
+                    if (!findUser) {
+                        const Admin = {
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName,
+                            photoUrl: user.photoURL,
+                            phoneNumber: user.phoneNumber,
+                            providerId: user.providerId,
+                            bio: req.body.bio,
+                            role: 'user',
+                        };
+                        User.create(Admin).then(createdUser => res.send(createdUser));
+                    } else {
+                        res.status(500).send('auth/email-already-exists');
+                    }
+                }).catch((e) => {
+                    res.status(500).send(e);
+                });
+            });
+        } else {
+            res.status(500).send(err);
+        }
+    });
 });
   
 router.post('/find', function (req, res, next) {

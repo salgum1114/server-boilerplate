@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { List, Card, Button, Avatar, Col, Row } from 'antd';
-import axios from 'axios';
+import { List, Card, Avatar, Col } from 'antd';
 import dynamic from 'next/dynamic';
 
 import { Router, Link } from '../../routes';
 import Tags from './common/Tags';
+import EmptyPage from './common/EmptyPage';
+import client from '../services/client';
+import AuthButton from './auth/AuthButton';
 
 const PostEditor = dynamic(import('./post/PostEditor'), {
     ssr: false,
@@ -71,7 +73,7 @@ class Posts extends Component {
     }
 
     getPosts = (callback) => {
-        axios.get('/api/posts').then((response) => {
+        client.get('/api/posts').then((response) => {
             this.setState({
                 posts: response.data,
                 writeMode: false,
@@ -115,10 +117,11 @@ class Posts extends Component {
                             actions={[<Tags tags={post.tags} />]}
                         >
                             <List.Item.Meta
-                                avatar={<Avatar src={'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />}
+                                avatar={<Avatar src={post.user.photoUrl}>{post.user.displayName || ''}</Avatar>}
                                 title={
                                     <Link route={`/posts/${post._id}`}>
-                                        <a style={styles.title}>{post.title.length > 30 ? post.title.substring(0, 30).concat('...') : post.title}
+                                        <a style={styles.title}>
+                                            {post.title.length > 30 ? post.title.substring(0, 30).concat('...') : post.title}
                                         </a>
                                     </Link>
                                 }
@@ -134,7 +137,7 @@ class Posts extends Component {
 
     renderCard = () => {
         const { posts } = this.state;
-        return (
+        return posts.length ? (
             posts.map((post) => {
                 return (
                     <Col key={post._id} className="container-col" xs={24} md={24} lg={12} xl={8} xxl={6}>
@@ -155,9 +158,9 @@ class Posts extends Component {
                             bodyStyle={styles.cardBody}
                         >
                             <Card.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                avatar={<Avatar src={post.user.photoURL}>{post.user.displayName ? post.user.displayName.charAt(0).toUpperCase() : ''}</Avatar>}
                                 title={post.title.length > 30 ? post.title.substring(0, 30).concat('...') : post.title}
-                                description={post.updatedAt}
+                                description={post.created}
                             />
                             <div style={styles.cardPreview}>
                                 {post.preview}
@@ -166,7 +169,7 @@ class Posts extends Component {
                     </Col>
                 );
             })
-        );
+        ) : <EmptyPage />;
     }
 
     render() {
@@ -177,7 +180,7 @@ class Posts extends Component {
                     {this.renderCard()}
                     {/* {this.renderList()} */}
                 </div>
-                <Button
+                <AuthButton
                     style={styles.writeButton}
                     size="large"
                     icon="edit"

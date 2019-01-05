@@ -2,25 +2,19 @@ const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const htmlToText = require('html-to-text');
 const utils = require('../../utils');
+const User = require('./user');
 
 const Schema = mongoose.Schema;
 
 autoIncrement.initialize(mongoose.connection);
 mongoose.set('useCreateIndex', true);
 
-const UserSchema = new Schema({
-    displayName: String,
-    email: String,
-    phoneNumber: String,
-    providerId: String,
-    photoUrl: String,
-    uid: String,
-});
-
 const PostSchema = new Schema({
     user: {
-        type: UserSchema,
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
         required: true,
+        autopopulate: true,
     },
     title: {
         type: String,
@@ -51,26 +45,43 @@ const PostSchema = new Schema({
     },
     created: {
         type: Date,
-        default: Date.now(),
-    }
-}, {
-    timestamps: true,
+        default: new Date().valueOf(),
+    },
+    updated: {
+        type: Date,
+        deafult: new Date().valueOf(),
+    },
 });
 
 // Create new todo document
-PostSchema.statics.create = function (payload) {
-    const thumbnail_matches = utils.matchesImage(payload.preview);
-    let preview = htmlToText.fromString(payload.preview, {
-        ignoreHref: true,
-        ignoreImage: true,
-    });
-    if (preview && preview.length > 200) {
-        preview = preview.substr(0, 200) + '...';
+PostSchema.statics.create = async function (req, res) {
+    const { email } = res.locals.user;
+    try {
+        const user = await User.findOneByEmail(email);
+        if (!user) {
+            throw new Error('Not found user');
+        }
+        const payload = req.body;
+        const thumbnail_matches = utils.matchesImage(payload.preview);
+        let preview = htmlToText.fromString(payload.preview, {
+            ignoreHref: true,
+            ignoreImage: true,
+        });
+        if (preview && preview.length > 200) {
+            preview = preview.substr(0, 200) + '...';
+        }
+        // this === Model
+        const post = new this({
+            ...payload,
+            preview,
+            thumbnail: thumbnail_matches ? thumbnail_matches[1] : '',
+            user: user._id,
+        });
+        // return Promise
+        return post.save();
+    } catch (error) {
+        throw error;
     }
-    // this === Model
-    const post = new this({ ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' });
-    // return Promise
-    return post.save();
 };
   
 // Find All
@@ -103,6 +114,14 @@ PostSchema.statics.updateById = function (id, payload) {
 PostSchema.statics.deleteById = function (id) {
     return this.remove({ _id: id });
 };
+
+PostSchema.pre('find', function() {
+    this.populate('user');
+});
+
+PostSchema.pre('findOne', function() {
+    this.populate('user');
+});
 
 PostSchema.plugin(autoIncrement.plugin, 'Post');
 const Model = mongoose.model('Post', PostSchema);

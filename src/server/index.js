@@ -6,7 +6,7 @@ const { parse } = require('url');
 const { resolve } = require('path');
 
 const routes = require('../routes');
-const firebase = require('./firebase/firebase');
+const initializeFirebase = require('./firebase/firebase');
 const database = require('./database/database');
 
 const port = parseInt(process.env.PORT, 10) || 80;
@@ -17,7 +17,7 @@ const handler = routes.getRequestHandler(app);
 
 app.prepare().then(() => {
     database.init();
-    firebase();
+    initializeFirebase();
 
     const server = express();
     const vapidKeys = webpush.generateVAPIDKeys();

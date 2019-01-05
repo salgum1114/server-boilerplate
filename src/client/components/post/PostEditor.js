@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import TuiEditor from 'tui-editor';
 import { Button, Input, Select, Form, message } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import axios from 'axios';
-import firebase from 'firebase/app';
 
 import { Router } from '../../../routes';
+import client from '../../services/client';
 
 message.config({
     top: 60,
@@ -68,10 +67,6 @@ class PostEditor extends Component {
                 message.warn('내용을 입력하세요.');
                 return;
             }
-            if (!firebase.auth().currentUser) {
-                return;
-            }
-            const currentUser = firebase.auth().currentUser.providerData[0];
             const { title, tags, category } = values;
             const newPost = {
                 title,
@@ -79,10 +74,9 @@ class PostEditor extends Component {
                 category,
                 content: content.concat('\n'),
                 preview: this.editor.getHtml(),
-                user: currentUser,
             };
             if (isEmpty(post)) {
-                axios.post('/api/posts', newPost).then((response) => {
+                client.post('/api/posts', newPost).then((response) => {
                     const { _id } = response.data;
                     message.success('글쓰기 성공.')
                     Router.pushRoute(`/posts/${_id}`);
@@ -90,7 +84,7 @@ class PostEditor extends Component {
                     console.error(`[ERROR] ${this.constructor.name} savePost()`, error);
                 })
             } else {
-                axios.put(`/api/posts/${post._id}`, newPost).then((response) => {
+                client.put(`/api/posts/${post._id}`, newPost).then((response) => {
                     const { _id } = response.data;
                     message.success('글쓰기 성공.')
                     Router.pushRoute(`/posts/${_id}`).then(() => {

@@ -43,7 +43,7 @@ class UserAvatar extends Component {
                 </Menu.Item>
                 <Menu.Divider/>
                 <Menu.Item>
-                    <Link route="/admin"><a>{'내 포스트'}</a></Link>
+                    <Link route="/write"><a>{'내 포스트'}</a></Link>
                 </Menu.Item>
                 <Menu.Divider/>
                 <Menu.Item>
@@ -55,7 +55,9 @@ class UserAvatar extends Component {
             <Avatar style={styles.avatar} onClick={() => { Router.pushRoute('/login'); }}><Icon type="user" /></Avatar>
         ) : (
             <Dropdown overlay={menu} trigger={['click']}>
-                <Avatar src={currentUser.photoUrl} style={styles.avatar}>{currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : ''}</Avatar>
+                <Avatar src={currentUser.photoURL} style={styles.avatar}>
+                    {currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : ''}
+                </Avatar>
             </Dropdown>
         );
     }
