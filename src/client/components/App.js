@@ -80,9 +80,9 @@ class App extends Component {
                                         <Menu.Item key="home" onClick={this.onClose}>
                                             <Link route="/"><a>홈</a></Link>
                                         </Menu.Item>
-                                        <Menu.Item key="notices" onClick={this.onClose}>
+                                        {/* <Menu.Item key="notices" onClick={this.onClose}>
                                             <Link route="/notices"><a>공지 사항</a></Link>
-                                        </Menu.Item>
+                                        </Menu.Item> */}
                                         <Menu.Item key="posts" onClick={this.onClose}>
                                             <Link route="/posts"><a>포스트</a></Link>
                                         </Menu.Item>
