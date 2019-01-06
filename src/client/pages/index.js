@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import Home from '../components/Home';
+// import Home from '../components/Home';
+import Posts from '../components/Posts';
 import registerServiceWorker from '../registerServiceWorker';
 
 export default class extends Component {
@@ -9,6 +10,6 @@ export default class extends Component {
     }
 
     render() {
-        return <Home {...this.props} />;
+        return <Posts {...this.props} />;
     }
 }

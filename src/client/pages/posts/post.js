@@ -12,7 +12,7 @@ const post = (props) => {
 
 post.getInitialProps = async ({ asPath, pathname, query }) => {
     try {
-        const res = await axios(`/api${asPath}`);
+        const res = await axios.get(`/api${asPath}`);
         if (res.data.statusCode) {
             return { statusCode: res.data.statusCode > 200 ? res.data.statusCode : false };
         }

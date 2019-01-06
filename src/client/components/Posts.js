@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List, Card, Avatar, Col } from 'antd';
 import dynamic from 'next/dynamic';
+import moment from 'moment';
 
 import { Router, Link } from '../../routes';
 import Tags from './common/Tags';
@@ -58,17 +59,12 @@ const styles = {
 
 class Posts extends Component {
     state = {
-        posts: [],
+        posts: this.props.pageProps.posts || [],
         writeMode: false,
     }
 
-    componentDidMount() {
-        console.log('componentDidMount', this.props);
-        this.getPosts();
-    }
-
     componentWillReceiveProps(nextProps) {
-        console.log('componentWillReceiveProps', nextProps);
+        console.log(nextProps);
         this.changeMode(false);
     }
 
@@ -160,7 +156,7 @@ class Posts extends Component {
                             <Card.Meta
                                 avatar={<Avatar src={post.user.photoURL}>{post.user.displayName ? post.user.displayName.charAt(0).toUpperCase() : ''}</Avatar>}
                                 title={post.title.length > 30 ? post.title.substring(0, 30).concat('...') : post.title}
-                                description={post.created}
+                                description={moment(post.created).fromNow()}
                             />
                             <div style={styles.cardPreview}>
                                 {post.preview}

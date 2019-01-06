@@ -12,12 +12,13 @@ export default class RootDocument extends Document {
         return (
             <html>
                 <Head>
+                    <meta name="google-site-verification" content="ATApnI1ENgfOubKjxuuMyWbVBdBN7ZqFu6N9jD36eAc" />
                     <meta name='viewport' content='width=device-width, initial-scale=1' />
                     <meta charSet='utf-8' />
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/favicon.ico" />
                     <link rel="stylesheet" href="/loader.css" />
-                    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/antd/3.11.2/antd.min.css' />
+                    <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosanskr.css"></link>
                     <style jsx global>
                         {`
                             body {

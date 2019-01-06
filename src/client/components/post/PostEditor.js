@@ -36,7 +36,7 @@ class PostEditor extends Component {
         this.editor = new TuiEditor({
             el: document.querySelector('#editor'),
             height: '100%',
-            initialEditType: 'markdown',
+            initialEditType: 'wysiwyg',
             previewStyle: 'vertical',
             initialValue: this.props.post.content,
         });
@@ -59,7 +59,9 @@ class PostEditor extends Component {
         const { form, post, changeMode } = this.props;
         form.validateFields((err, values) => {
             if (err) {
-                console.error(err);
+                if (err.title) {
+                    message.warn('제목을 확인하세요.');
+                }
                 return;
             }
             const content = this.editor.getValue();

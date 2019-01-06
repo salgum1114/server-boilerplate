@@ -23,16 +23,6 @@ router.post('/register', function (req, res, next) {
             bio: req.body.bio,
             role: 'user',
         }).then(createdUser => res.send(createdUser));
-        // admin.app().database().ref('users').child(user.uid).set({
-        //     email: user.email,
-        //     displayName: user.displayName,
-        //     photoUrl: user.photoURL,
-        //     phoneNumber: user.phoneNumber,
-        //     providerId: user.providerId,
-        //     bio: req.body.bio,
-        // }).then((response) => {
-        //     res.send(user);
-        // });
     })
     .catch((err) => {
         if (err.code === 'auth/email-already-exists') {

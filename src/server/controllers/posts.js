@@ -1,11 +1,26 @@
 const express = require('express');
+const isEmpty = require('lodash').isEmpty;
 const Post = require('../models/post');
 
 const router = express.Router();
 
 router.get('/', function (req, res, next) {
-    Post.findAll()
-        .then(posts => res.send(posts))
+    if (!isEmpty(req.query)) {
+        const { email, ...other } = req.query;
+        Post.findByUser(email)
+            .then(posts => res.send(posts))
+            .catch(err => res.status(500).send(err));
+    } else {
+        Post.findAll()
+            .then(posts => res.send(posts))
+            .catch(err => res.status(500).send(err));
+    }
+});
+
+router.get('/tags', function (req, res, next) {
+    const { email, ...other } = req.query;
+    Post.findTagsByUser(email)
+        .then(tags => res.send(tags))
         .catch(err => res.status(500).send(err));
 });
   
@@ -22,7 +37,7 @@ router.get('/:id', function (req, res, next) {
 
 router.use('/', require('../middlewares/firebaseMiddleware'));
 router.post('/', function (req, res, next) {
-    Post.create(req, res)
+    Post.create({ ...req.body, ...res.locals.user })
         .then(post => res.send(post))
         .catch(err => res.status(500).send(err));
 });

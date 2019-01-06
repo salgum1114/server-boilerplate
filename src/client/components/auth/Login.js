@@ -11,7 +11,7 @@ const styles = {
     container: { height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' },
     form: { maxWidth: 576, flex: 1, display: 'flex', flexDirection: 'column' },
     register: { display: 'flex', justifyContent: 'space-evenly' },
-    login: { marginBottom: 24 },
+    login: { marginBottom: 24, height: 48, fontSize: '1.25em', fontWeight: 500 },
     github: { background: '#e9ecef', color: '#212529', border: '1px solid #ced4da' },
     google: { background: '#c92a2a', color: '#fff', border: '1px solid #d72020' },
     facebook: { background: '#1971c2', color: '#fff', border: '1px solid #1864ab' },
@@ -25,6 +25,19 @@ class Login extends Component {
     componentWillMount() {
         if (this.props.currentUser) {
             Router.pushRoute('/posts');
+        }
+    }
+
+    getProvider = (method) => {
+        switch (method) {
+            case 'password':
+                return new firebase.auth.EmailAuthProvider();
+            case 'github.com':
+                return new firebase.auth.GithubAuthProvider();
+            case 'google.com':
+                return new firebase.auth.GoogleAuthProvider();
+            case 'facebook.com':
+                return new firebase.auth.FacebookAuthProvider();
         }
     }
 
@@ -44,41 +57,39 @@ class Login extends Component {
         });
     }
 
-    onGithubLogin = () => {
-        const provider = new firebase.auth.GithubAuthProvider();
+    onProviderLogin = (method, error) => {
+        if (error) {
+            if (error.code === 'auth/account-exists-with-different-credential') {
+                var pendingCred = error.credential;
+                var email = error.email;
+                firebase.auth().fetchSignInMethodsForEmail(email).then((methods) => {
+                    const provider = this.getProvider(methods[0]);
+                    firebase.auth().signInWithRedirect(provider)
+                    .then((result) => {
+                        result.user.linkAndRetrieveDataWithCredential(pendingCred).then(function(usercred) {
+                            Router.pushRoute('/posts');
+                        });
+                    });
+                });
+            }
+            return;
+        }
+        const provider = this.getProvider(method);
         firebase.auth().signInWithPopup(provider).then((result) => {
-            this.register(result);
+            this.onRegister(result);
         }).catch((error) => {
-            this.providerLogin(error);
+            this.onProviderLogin(null, error);
         });
     }
 
-    onGoogleLogin = () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            this.register(result);
-        }).catch((error) => {
-            this.providerLogin(error);
-        });
-    }
-
-    onFacebookLogin = () => {
-        const provider = new firebase.auth.FacebookAuthProvider();
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            this.register(result);
-        }).catch((error) => {
-            this.providerLogin(error);
-        });
-    }
-
-    register = (result) => {
+    onRegister = (result) => {
         client.get(`/api/users/${result.user.email}`).then((response) => {
             if (response.data.statusCode === 404) {
                 const user = {
                     uid: result.user.uid,
                     email: result.user.email,
                     displayName: result.user.displayName,
-                    providerId: result.user.providerData[0].providerId,
+                    phoneNumber: result.user.phoneNumber,
                     photoURL: result.user.photoURL,
                     role: 'user',
                 };
@@ -90,29 +101,6 @@ class Login extends Component {
                 Router.pushRoute('/posts');
             }
         });
-    }
-
-    providerLogin = (error) => {
-        if (error.code === 'auth/account-exists-with-different-credential') {
-            client.get(`/api/users/${error.email}`).then((response) => {
-                if (response.data.providerId === 'google.com') {
-                    firebase.auth().signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-                    .then(() => {
-                        Router.pushRoute('/posts');
-                    });
-                } else if (response.data.providerId === 'github.com') {
-                    firebase.auth().signInWithRedirect(new firebase.auth.GithubAuthProvider())
-                    .then(() => {
-                        Router.pushRoute('/posts');
-                    });
-                } else if (response.data.providerId === 'facebook.com') {
-                    firebase.auth().signInWithRedirect(new firebase.auth.FacebookAuthProvider())
-                    .then(() => {
-                        Router.pushRoute('/posts');
-                    });
-                }
-            });
-        }
     }
 
     validateEmail = (rule, value, callback) => {
@@ -158,20 +146,23 @@ class Login extends Component {
                     </div>
                     <Divider>{'또는'}</Divider>
                     <Button
+                        size="large"
                         style={{ ...styles.login, ...styles.github }}
-                        onClick={this.onGithubLogin}
+                        onClick={() => { this.onProviderLogin('github.com'); } }
                     >
                         <Icon type="github" />{'Github 로그인하기'}
                     </Button>
                     <Button
+                        size="large"
                         style={{ ...styles.login, ...styles.google }}
-                        onClick={this.onGoogleLogin}
+                        onClick={() => { this.onProviderLogin('google.com'); } }
                     >
                         <Icon type="google" />{'Google 로그인하기'}
                     </Button>
                     <Button
+                        size="large"
                         style={{ ...styles.login, ...styles.facebook }}
-                        onClick={this.onFacebookLogin}
+                        onClick={() => { this.onProviderLogin('facebook.com'); } }
                     >
                         <Icon type="facebook" />{'Facebook 로그인하기'}
                     </Button>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Tag, Icon } from 'antd';
+import { Divider, Icon } from 'antd';
 import TuiEditor from 'tui-editor/dist/tui-editor-Viewer';
+import moment from 'moment';
 
 import UserInfo from '../user/UserInfo';
 import Comments from '../comment/Comments';
@@ -35,7 +36,7 @@ class PostViewer extends Component {
         return (
             <div style={styles.container}>
                 <h1 style={styles.title}>{post.title}</h1>
-                <div style={styles.createdTime}>{post.createdAt}</div>
+                <div style={styles.createdTime}>{moment(post.created).fromNow()}</div>
                 <Divider />
                 <div id="editor" />
                 <div style={styles.tags}>

@@ -19,7 +19,7 @@ class UserAvatar extends Component {
             firebase.auth().onAuthStateChanged((currentUser) => {
                 if (currentUser) {
                     this.setState({
-                        currentUser: currentUser.providerData[0],
+                        currentUser,
                     });
                 } else {
                     this.setState({
@@ -31,29 +31,33 @@ class UserAvatar extends Component {
     }
 
     onLogout = () => {
-        firebase.auth().signOut();
+        firebase.auth().signOut()
+        .then(() => {
+            Router.pushRoute('/posts');
+        });
     }
 
     render() {
         const { currentUser } = this.state;
+        if (isEmpty(currentUser)) {
+            return (
+                <Avatar style={styles.avatar} onClick={() => { Router.pushRoute('/login'); }}>
+                    <Icon type="user" />
+                </Avatar>
+            );
+        }
         const menu = (
             <Menu>
                 <Menu.Item>
-                    <Link route="/profile"><a>{'프로필 설정'}</a></Link>
+                    <Link route="/profile"><a>{'내 프로필'}</a></Link>
                 </Menu.Item>
                 <Menu.Divider/>
                 <Menu.Item>
-                    <Link route="/write"><a>{'내 포스트'}</a></Link>
-                </Menu.Item>
-                <Menu.Divider/>
-                <Menu.Item>
-                    <Link route="/posts"><a onClick={this.onLogout}>{'로그 아웃'}</a></Link>
+                    <a onClick={this.onLogout}>{'로그 아웃'}</a>
                 </Menu.Item>
             </Menu>
         );
-        return isEmpty(currentUser) ? (
-            <Avatar style={styles.avatar} onClick={() => { Router.pushRoute('/login'); }}><Icon type="user" /></Avatar>
-        ) : (
+        return (
             <Dropdown overlay={menu} trigger={['click']}>
                 <Avatar src={currentUser.photoURL} style={styles.avatar}>
                     {currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : ''}

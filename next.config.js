@@ -16,5 +16,8 @@ module.exports = withOffline(
         workboxOpts: {
             swSrc: './src/client/service-worker.js',
         },
+        lessLoaderOptions: {
+            javascriptEnabled: true,
+        },
     }))
 );

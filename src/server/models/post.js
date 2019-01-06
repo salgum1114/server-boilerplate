@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const htmlToText = require('html-to-text');
+const difference = require('lodash').difference;
+const isEqual = require('lodash').isEqual;
 const utils = require('../../utils');
 const User = require('./user');
 
@@ -44,24 +46,22 @@ const PostSchema = new Schema({
         default: 0,
     },
     created: {
-        type: Date,
-        default: new Date().valueOf(),
+        type: Number,
+        default: () => new Date().valueOf(),
     },
     updated: {
-        type: Date,
-        deafult: new Date().valueOf(),
+        type: Number,
+        deafult: () => new Date().valueOf(),
     },
 });
 
 // Create new todo document
-PostSchema.statics.create = async function (req, res) {
-    const { email } = res.locals.user;
+PostSchema.statics.create = async function (payload) {
     try {
-        const user = await User.findOneByEmail(email);
+        const user = await User.findOneByEmail(payload.email);
         if (!user) {
             throw new Error('Not found user');
         }
-        const payload = req.body;
         const thumbnail_matches = utils.matchesImage(payload.preview);
         let preview = htmlToText.fromString(payload.preview, {
             ignoreHref: true,
@@ -90,6 +90,15 @@ PostSchema.statics.findAll = function () {
     // V4부터 exec() 필요없음
     return this.find({});
 };
+
+PostSchema.statics.findByUser = async function (email) {
+    const user = await User.findOneByEmail(email);
+    if (!user) {
+        throw new Error('Not found user');
+    }
+    return this.find()
+        .where('user').equals(user._id);
+};
   
 // Find One by todoid
 PostSchema.statics.findOneById = function (id) {
@@ -109,17 +118,35 @@ PostSchema.statics.updateById = function (id, payload) {
     // { new: true }: return the modified document rather than the original. defaults to false
     return this.findOneAndUpdate({ _id: id }, { ...payload, preview, thumbnail: thumbnail_matches ? thumbnail_matches[1] : '' }, { new: true });
 };
+
+PostSchema.statics.findTagsByUser = async function (email) {
+    const user = await User.findOneByEmail(email);
+    if (!user) {
+        throw new Error('Not found user');
+    }
+    try {
+        const values = await this.find()
+            .where('user').equals(user._id)
+            .select('tags');
+        return values.reduce((prev, value) => {
+            const diff = difference(value.tags, prev);
+            return prev.concat(diff);
+        }, []);
+    } catch (error) {
+        throw error;
+    }
+}
   
 // Delete by todoid
 PostSchema.statics.deleteById = function (id) {
     return this.remove({ _id: id });
 };
 
-PostSchema.pre('find', function() {
+PostSchema.pre('find', function () {
     this.populate('user');
 });
 
-PostSchema.pre('findOne', function() {
+PostSchema.pre('findOne', function () {
     this.populate('user');
 });
 

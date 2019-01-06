@@ -31,7 +31,6 @@ const UserSchema = new Schema({
         unique: true,
         index: true,
     },
-    providerId: String,
     created: {
         type: Date,
         default: new Date().valueOf(),
