@@ -1,5 +1,9 @@
-const express = require('express');
-const Post = require('../models/post');
+import express from 'express';
+
+import Post from '../models/post';
+import AuthController from './auth.controller';
+import PostController from './posts.controller';
+import UserController from './users.controller';
 
 const router = express.Router();
 
@@ -12,8 +16,8 @@ router.get(API_PREFIX, (req, res) => {
     });
 });
 // router.use(`${API_PREFIX}/notices`, require('./notices'))
-router.use(`${API_PREFIX}`, require('./auth'));
-router.use(`${API_PREFIX}/posts`, require('./posts'));
-router.use(`${API_PREFIX}/users`, require('./users'));
+router.use(`${API_PREFIX}/auth`, AuthController);
+router.use(`${API_PREFIX}/posts`, PostController);
+router.use(`${API_PREFIX}/users`, UserController);
 
 module.exports = router;

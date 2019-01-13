@@ -1,5 +1,6 @@
-const express = require('express');
-const User = require('../models/user');
+import express from 'express';
+
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -39,4 +40,4 @@ router.delete('/:id', function (req, res, next) {
         .catch(err => res.status(500).send(err));
 });
 
-module.exports = router;
+export default router;

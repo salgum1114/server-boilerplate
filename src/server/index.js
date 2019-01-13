@@ -1,13 +1,13 @@
-const webpush = require('web-push');
-const express = require('express');
-const next = require('next');
-const bodyParser = require('body-parser');
-const { parse } = require('url');
-const { resolve } = require('path');
+import webpush from 'web-push';
+import express from 'express';
+import next from 'next';
+import bodyParser from 'body-parser';
+import { parse } from 'url';
+import { resolve } from 'path';
 
-const routes = require('../routes');
-const initializeFirebase = require('./firebase/firebase');
-const database = require('./database/database');
+import routes from '../routes';
+import initializeFirebase from './firebase/firebase';
+import database from './database/database';
 
 const port = parseInt(process.env.PORT, 10) || 80;
 const dev = process.env.NODE_ENV !== 'production';

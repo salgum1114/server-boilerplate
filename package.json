@@ -8,12 +8,13 @@
     "dev": "next -p 8080 ./src/client",
     "build": "next build ./src/client",
     "start": "next start -p 80 ./src/client",
-    "server:dev": "nodemon src/server/index.js",
+    "server:dev": "nodemon --exec babel-node src/server/index.js",
     "server:start": "set NODE_ENV=production&&node src/server/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zeit/next-typescript": "^1.1.1",
     "antd": "^3.11.3",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
+    "@babel/node": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.1.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const { isEmail } = require('validator');
-const uniqueValidator = require('mongoose-unique-validator');
+import mongoose from 'mongoose';
+import { isEmail } from 'validator';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const Schema = mongoose.Schema;
 
@@ -75,4 +75,4 @@ UserSchema.statics.deleteByEmail = function (email) {
 UserSchema.plugin(uniqueValidator);
 const Model = mongoose.model('User', UserSchema);
 
-module.exports = Model;
+export default Model;

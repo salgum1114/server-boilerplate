@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
 function firebaseAuthMiddleware(req, res, next) {
     const authorization = req.header('Authorization');
@@ -19,4 +19,4 @@ function firebaseAuthMiddleware(req, res, next) {
     }
 }
 
-module.exports = firebaseAuthMiddleware;
+export default firebaseAuthMiddleware;

@@ -2,12 +2,13 @@
 const withLess = require('@zeit/next-less');
 const withOffline = require('next-offline');
 const withImages = require('next-images');
-const withCSS = require('@zeit/next-css')
+const withCSS = require('@zeit/next-css');
+const withTypescript = require('@zeit/next-typescript');
 
 const getRoutes = require('./src/routes');
 
 
-module.exports = withOffline(
+module.exports = withTypescript(withOffline(
     withCSS(withLess({
         ...withImages(),
         exportPathMap: getRoutes,
@@ -20,4 +21,4 @@ module.exports = withOffline(
             javascriptEnabled: true,
         },
     }))
-);
+));

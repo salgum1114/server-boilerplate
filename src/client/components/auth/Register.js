@@ -24,7 +24,7 @@ class Login extends Component {
             if (err) {
                 return;
             }
-            axios.post('/api/register', values)
+            axios.post('/api/auth/register', values)
             .then((response) => {
                 firebase.auth().signInWithEmailAndPassword(values.email, values.password)
                 .then((response) => {

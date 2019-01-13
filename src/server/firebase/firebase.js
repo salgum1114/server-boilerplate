@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
-const serviceAccount = require('./salgum1114-5b040-firebase-adminsdk-86k0z-1ed5ca0c9a.json');
+import serviceAccount from './salgum1114-5b040-firebase-adminsdk-86k0z-1ed5ca0c9a.json';
 
 const initializeFirebase = () => {
     //initialize firebase

@@ -1,7 +1,7 @@
-const express = require('express');
-const admin = require('firebase-admin');
+import express from 'express';
+import admin from 'firebase-admin';
 
-const User = require('../models/user');
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -59,4 +59,4 @@ router.post('/find', function (req, res, next) {
     .catch(err => res.status(500).send(err));
 });
 
-module.exports = router;
+export default router;

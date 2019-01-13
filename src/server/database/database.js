@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const admin = require('firebase-admin');
-const User = require('../models/user');
+import mongoose from 'mongoose';
+import admin from 'firebase-admin';
 
-module.exports = {
+import User from '../models/user';
+
+export default {
     init: () => {
         // use Node.js with native Promise
         mongoose.Promise = global.Promise;

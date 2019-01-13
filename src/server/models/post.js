@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
-const htmlToText = require('html-to-text');
-const difference = require('lodash').difference;
-const isEqual = require('lodash').isEqual;
-const utils = require('../../utils');
-const User = require('./user');
+import mongoose from 'mongoose';
+import autoIncrement from 'mongoose-auto-increment';
+import htmlToText from 'html-to-text';
+import difference from 'lodash/difference';
+import isEqaul from 'lodash/isEqual';
+
+import utils from '../../utils';
+import User from './user';
 
 const Schema = mongoose.Schema;
 
@@ -153,4 +154,4 @@ PostSchema.pre('findOne', function () {
 PostSchema.plugin(autoIncrement.plugin, 'Post');
 const Model = mongoose.model('Post', PostSchema);
 
-module.exports = Model;
+export default Model;

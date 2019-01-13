@@ -1,6 +1,7 @@
-const express = require('express');
-const isEmpty = require('lodash').isEmpty;
-const Post = require('../models/post');
+import express from 'express';
+import isEmtpy from 'lodash/isEmpty';
+
+import Post from '../models/post';
 
 const router = express.Router();
 
@@ -54,4 +55,4 @@ router.delete('/:id', function (req, res, next) {
         .catch(err => res.status(500).send(err));
 });
 
-module.exports = router;
+export default router;
