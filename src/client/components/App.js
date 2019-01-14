@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import dynamic from 'next/dynamic';
 import { Layout, Menu, Icon, Drawer, Avatar, Input, Dropdown } from 'antd';
 
-import { Link } from '../../routes';
-import '../styles/index.less';
+import Routes from '../../routes';
 import UserAvatar from './user/UserAvatar';
+
+import '../styles/index.less';
+
+const Link = Routes.Link;
+const Router = Routes.Router;
 
 const MediaQuery = dynamic(import('react-mqls'), {
     ssr: false,

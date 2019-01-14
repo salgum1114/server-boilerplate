@@ -3,7 +3,10 @@ import { Avatar, Dropdown, Menu, Icon } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import firebase from 'firebase/app';
 
-import { Router, Link } from '../../../routes';
+import Routes from '../../../routes';
+
+const Link = Routes.Link;
+const Router = Routes.Router;
 
 const styles = {
     avatar: { margin: '0 24px', cursor: 'pointer' },

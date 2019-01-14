@@ -3,20 +3,31 @@ import { List, Card, Avatar, Col } from 'antd';
 import dynamic from 'next/dynamic';
 import moment from 'moment';
 
-import { Router, Link } from '../../routes';
 import Tags from './common/Tags';
 import EmptyPage from './common/EmptyPage';
 import client from '../services/client';
 import AuthButton from './auth/AuthButton';
+import Routes from '../../routes';
+import { IPost } from '../types/post';
 
-const PostEditor = dynamic(import('./post/PostEditor'), {
+interface PageProps {
+    posts: Array<IPost>,
+};
+
+interface PostsProps {
+    pageProps: PageProps,
+};
+
+const Link = Routes.Link;
+const Router = Routes.Router;
+const PostEditor = dynamic(import('./post/PostEditor').then(module => module.default), {
     ssr: false,
     loading: () => '',
 });
 
 const styles = {
     container: {},
-    writeButton: { position: 'absolute', bottom: '24px', right: '24px' },
+    writeButton: { position: 'absolute', bottom: '24px', right: '24px' } as React.CSSProperties,
     thumbnail: {
         display: 'flex',
         alignItems: 'center',
@@ -24,16 +35,16 @@ const styles = {
         width: 300,
         height: 160,
         overflow: 'hidden',
-    },
-    title: { wordBreak: 'break-word' },
-    card: { margin: '16px 0' },
-    cardBody: { height: '12rem' },
+    } as React.CSSProperties,
+    title: { wordBreak: 'break-word' } as React.CSSProperties,
+    card: { margin: '16px 0' } as React.CSSProperties,
+    cardBody: { height: '12rem' } as React.CSSProperties,
     cardCover: {
         width: '100%',
         paddingTop: '56.25%',
         position: 'relative',
         display: 'block',
-    },
+    } as React.CSSProperties,
     cardThumbnail: {
         OObjectFit: 'cover',
         objectFit: 'cover',
@@ -45,7 +56,7 @@ const styles = {
         left: 0,
         width: '100%',
         height: '100%',
-    },
+    } as React.CSSProperties,
     cardPreview: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -54,10 +65,10 @@ const styles = {
         WebkitBoxOrient: 'vertical',
         wordWrap: 'break-word',
         marginTop: '1.5rem',
-    },
+    } as React.CSSProperties,
 };
 
-class Posts extends Component {
+class Posts extends Component<PostsProps> {
     state = {
         posts: this.props.pageProps.posts || [],
         writeMode: false,
@@ -81,7 +92,7 @@ class Posts extends Component {
         });
     }
 
-    changeMode = (writeMode) => {
+    changeMode = (writeMode: boolean) => {
         this.setState({
             writeMode,
         });
@@ -95,7 +106,7 @@ class Posts extends Component {
                 size="large"
                 locale={{ emptyText: '' }}
                 dataSource={posts}
-                renderItem={(post) => {
+                renderItem={(post: PostProps) => {
                     return (
                         <List.Item
                             key={post._id}
@@ -113,7 +124,7 @@ class Posts extends Component {
                             actions={[<Tags tags={post.tags} />]}
                         >
                             <List.Item.Meta
-                                avatar={<Avatar src={post.user.photoUrl}>{post.user.displayName || ''}</Avatar>}
+                                avatar={<Avatar src={post.user.photoURL}>{post.user.displayName || ''}</Avatar>}
                                 title={
                                     <Link route={`/posts/${post._id}`}>
                                         <a style={styles.title}>

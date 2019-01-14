@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@zeit/next-typescript": "^1.1.1",
     "antd": "^3.11.3",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -28,7 +27,6 @@
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-unique-validator": "^2.0.2",
     "next": "^7.0.2",
-    "next-images": "^1.0.4",
     "next-routes": "^1.4.2",
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
@@ -54,7 +52,10 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
+    "@types/next": "^7.0.6",
+    "@types/react": "^16.7.18",
     "@zeit/next-less": "^1.0.1",
+    "@zeit/next-typescript": "^1.1.1",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-dynamic-import-webpack": "^1.0.2",
@@ -64,8 +65,11 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "^1.9.0",
     "less": "^3.9.0",
+    "next-images": "^1.0.4",
     "next-offline": "^3.3.1",
     "nodemon": "^1.18.9",
+    "tslint": "^5.12.1",
+    "tslint-react": "^3.6.0",
     "workbox-webpack-plugin": "^3.6.3"
   }
 }

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Tabs, Avatar, Divider, Button } from 'antd';
 
-import { Router } from '../../../routes';
 import client from '../../services/client';
 import Tags from '../common/Tags';
+import Routes from '../../../routes';
+
+const Link = Routes.Link;
+const Router = Routes.Router;
 
 const styles = {
     container: { display: 'flex', flexDirection: 'column' },

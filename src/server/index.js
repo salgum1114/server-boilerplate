@@ -5,15 +5,16 @@ import bodyParser from 'body-parser';
 import { parse } from 'url';
 import { resolve } from 'path';
 
-import routes from '../routes';
+import Routes from '../routes';
 import initializeFirebase from './firebase/firebase';
 import database from './database/database';
+import controllers from './controllers';
 
 const port = parseInt(process.env.PORT, 10) || 80;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src/client', dev });
 
-const handler = routes.getRequestHandler(app);
+const handler = Routes.getRequestHandler(app);
 
 app.prepare().then(() => {
     database.init();
@@ -34,7 +35,7 @@ app.prepare().then(() => {
     server.use(bodyParser.json());
 
     // API contoller use
-    server.use(require('./controllers'));
+    server.use(controllers);
 
     // Service worker push message
     server.get('/vapidPublicKey', function(req, res) {

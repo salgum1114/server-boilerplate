@@ -7,7 +7,6 @@ const withTypescript = require('@zeit/next-typescript');
 
 const getRoutes = require('./src/routes');
 
-
 module.exports = withTypescript(withOffline(
     withCSS(withLess({
         ...withImages(),

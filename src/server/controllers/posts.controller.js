@@ -1,6 +1,7 @@
 import express from 'express';
-import isEmtpy from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 
+import firebaseMiddleware from '../middlewares/firebaseMiddleware';
 import Post from '../models/post';
 
 const router = express.Router();
@@ -36,7 +37,7 @@ router.get('/:id', function (req, res, next) {
         .catch(err => res.status(500).send(err));
 });
 
-router.use('/', require('../middlewares/firebaseMiddleware'));
+router.use('/', firebaseMiddleware);
 router.post('/', function (req, res, next) {
     Post.create({ ...req.body, ...res.locals.user })
         .then(post => res.send(post))

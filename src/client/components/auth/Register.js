@@ -3,7 +3,7 @@ import { Form, Input, Button } from 'antd';
 import axios from 'axios';
 import firebase from 'firebase/app';
 
-import { Router } from '../../../routes';
+import Router from '../../../routes/Router';
 
 const styles = {
     container: { height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' },

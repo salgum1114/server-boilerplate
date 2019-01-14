@@ -20,4 +20,4 @@ router.use(`${API_PREFIX}/auth`, AuthController);
 router.use(`${API_PREFIX}/posts`, PostController);
 router.use(`${API_PREFIX}/users`, UserController);
 
-module.exports = router;
+export default router;

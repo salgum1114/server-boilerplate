@@ -3,41 +3,56 @@ import { Button, message, Modal } from 'antd';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
 
-import { Router } from '../../../routes';
 import AuthButton from '../auth/AuthButton';
+import Routes from '../../../routes';
+import { IPost } from '../../types/post';
+
+const Router = Routes.Router;
 
 message.config({
     top: 60,
     duration: 1,
 })
 
-const PostEditor = dynamic(import('./PostEditor'), {
+const PostEditor = dynamic(import('./PostEditor').then(module => module.default), {
     ssr: false,
     loading: () => '',
 });
 
-const PostViewer = dynamic(import('./PostViewer'), {
+const PostViewer = dynamic(import('./PostViewer').then(module => module.default), {
     ssr: false,
     loading: () => '',
 });
 
 const styles = {
-    container: { display: 'flex', justifyContent: 'center' },
-    noticeSummary: { cursor: 'pointer' },
+    container: { display: 'flex', justifyContent: 'center' } as React.CSSProperties,
+    noticeSummary: { cursor: 'pointer' } as React.CSSProperties,
     buttonContainer: {
         position: 'absolute',
         bottom: 24,
         right: 24,
         display: 'flex',
-    },
+    } as React.CSSProperties,
     button: {
         margin: '0 4px',
-    },
-    editButton: { marginLeft: 4 },
+    } as React.CSSProperties,
+    editButton: { marginLeft: 4 } as React.CSSProperties,
 };
 
-class Post extends Component {
-    state = {
+interface PageProps {
+    post: IPost,
+}
+
+interface PostProps {
+    pageProps: PageProps,
+}
+
+interface PostState {
+    editMode: boolean,
+}
+
+class Post extends Component<PostProps, PostState> {
+    state: PostState = {
         editMode: false,
     }
 
@@ -55,7 +70,7 @@ class Post extends Component {
         });
     }
 
-    deletePost = (id) => {
+    deletePost = (id: number) => {
         axios.delete(`/api/posts/${id}`).then(() => {
             message.success('글 삭제 성공');
             Router.pushRoute('/posts');

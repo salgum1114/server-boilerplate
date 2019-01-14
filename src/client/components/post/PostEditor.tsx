@@ -1,36 +1,40 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import TuiEditor from 'tui-editor';
 import { Button, Input, Select, Form, message } from 'antd';
 import isEmpty from 'lodash/isEmpty';
+import { FormComponentProps } from 'antd/lib/form/Form';
 
-import { Router } from '../../../routes';
 import client from '../../services/client';
+import Routes from '../../../routes';
+import { IPost } from '../../types/post';
+
+interface PostEditorProps {
+    post: IPost,
+    changeMode(writeMode: boolean): void,
+};
 
 message.config({
     top: 60,
     duration: 1.5,
 })
 
+const Router = Routes.Router;
+
 const styles = {
     container: {},
-    title: { width: '100%' },
-    tags: { width: '100%' },
-    category: { width: '100%' },
-    editor: { marginBottom: 24 },
-    cancelButton: { position: 'absolute', bottom: '24px', right: '72px' },
-    writeButton: { position: 'absolute', bottom: '24px', right: '24px' },
+    title: { width: '100%' } as React.CSSProperties,
+    tags: { width: '100%' } as React.CSSProperties,
+    category: { width: '100%' } as React.CSSProperties,
+    editor: { marginBottom: 24 } as React.CSSProperties,
+    cancelButton: { position: 'absolute', bottom: '24px', right: '72px' } as React.CSSProperties,
+    writeButton: { position: 'absolute', bottom: '24px', right: '24px' } as React.CSSProperties,
 };
 
-class PostEditor extends Component {
-    static propTypes = {
-        post: PropTypes.object,
-        changeMode: PropTypes.func,
-    }
-
-    static defaultProps = {
-        post: {},
-    }
+class PostEditor extends Component<PostEditorProps & FormComponentProps, {}> {
+    // static defaultProps: PostEditorProps = {
+    //     post: {},
+    //     changeMode: (mode) => { console.log(mode); },
+    // }
 
     componentDidMount() {
         this.editor = new TuiEditor({
@@ -156,4 +160,4 @@ class PostEditor extends Component {
     }
 }
 
-export default Form.create()(PostEditor);
+export default Form.create<PostEditorProps>()(PostEditor);

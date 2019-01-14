@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { Avatar } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 
-import { Link } from '../../../routes';
+import Routes from '../../../routes';
+
+const Link = Routes.Link;
+const Router = Routes.Router;
 
 const styles = {
     container: { display: 'flex', margin: '16px 0' },

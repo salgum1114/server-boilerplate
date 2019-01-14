@@ -2,8 +2,7 @@
     "compilerOptions": {
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "jsx": "preserve",
-        "lib": ["dom", "es2017"],
+        "jsx": "react",
         "module": "esnext",
         "moduleResolution": "node",
         "noEmit": true,
@@ -14,6 +13,14 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "esnext"
-    }
+        "target": "esnext",
+        "outDir": "./public",
+    },
+    "include": [
+        "./src/**/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
 }
